@@ -12,3 +12,4 @@ export const ANCIENT_CHARS = {
 export const ALL_SCRAMBLE_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+-=[]{}|;:,.<>?/~`';
 
 export type ScriptType = keyof typeof ANCIENT_CHARS;
+
