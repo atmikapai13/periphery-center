@@ -44,18 +44,18 @@ export function calculateBinaryGroups(
     'A': ['01110', '10001', '10001', '11111', '10001', '10001']
   };
 
-  // Mobile letter patterns: narrow 9-row x 4-col glyphs so the title fits.
+  // Mobile letter patterns: narrow 7-row x 4-col glyphs so the title fits.
   const mobilePatterns = {
-    'T': ['1111', '0110', '0110', '0110', '0110', '0110', '0110', '0110', '0110'],
-    'H': ['1001', '1001', '1001', '1001', '1111', '1001', '1001', '1001', '1001'],
-    'E': ['1111', '1000', '1000', '1000', '1110', '1000', '1000', '1000', '1111'],
-    'P': ['1110', '1001', '1001', '1001', '1110', '1000', '1000', '1000', '1000'],
-    'R': ['1110', '1001', '1001', '1001', '1110', '1010', '1010', '1001', '1001'],
-    'I': ['1111', '0110', '0110', '0110', '0110', '0110', '0110', '0110', '1111'],
-    'Y': ['1001', '1001', '1001', '0110', '0110', '0110', '0110', '0110', '0110'],
-    'C': ['0111', '1000', '1000', '1000', '1000', '1000', '1000', '1000', '0111'],
-    'N': ['1001', '1101', '1101', '1101', '1011', '1011', '1011', '1001', '1001'],
-    'A': ['0110', '1001', '1001', '1001', '1111', '1001', '1001', '1001', '1001']
+    'T': ['1111', '0110', '0110', '0110', '0110', '0110', '0110'],
+    'H': ['1001', '1001', '1001', '1111', '1001', '1001', '1001'],
+    'E': ['1111', '1000', '1000', '1110', '1000', '1000', '1111'],
+    'P': ['1110', '1001', '1001', '1110', '1000', '1000', '1000'],
+    'R': ['1110', '1001', '1001', '1110', '1010', '1001', '1001'],
+    'I': ['1111', '0110', '0110', '0110', '0110', '0110', '1111'],
+    'Y': ['1001', '1001', '1001', '0110', '0110', '0110', '0110'],
+    'C': ['0111', '1000', '1000', '1000', '1000', '1000', '0111'],
+    'N': ['1001', '1101', '1101', '1011', '1011', '1001', '1001'],
+    'A': ['0110', '1001', '1001', '1111', '1001', '1001', '1001']
   };
 
   const lines = ["THE", "PERIPHERY", "CENTER"];
@@ -91,7 +91,7 @@ export function calculateBinaryGroups(
     // that only tightens (margin then gap) as much as a narrow grid requires.
     letterPatterns = mobilePatterns;
     letterWidth = 4;
-    lineStride = 13; // 9 letter + 4 gap
+    lineStride = 10; // 7 letter + 4 gap
     leftMargin = 5;
     stride = letterWidth + 1;
     const titleWidth = (s: number, m: number) =>
@@ -104,10 +104,10 @@ export function calculateBinaryGroups(
     }
   }
 
-  // Calculate layout systematically (left-aligned, moved up from center)
+  // Calculate layout systematically: left-aligned (leftMargin) and the block is
+  // vertically centered within the matrix (no upward bias).
   const totalTextHeight = lines.length * lineStride;
-  const centerRow = Math.floor((gridHeight - totalTextHeight) / 2);
-  const startRow = Math.max(0, centerRow - Math.floor(gridHeight * 0.05)); // Move up by 12%
+  const startRow = Math.max(0, Math.floor((gridHeight - totalTextHeight) / 2));
 
   lines.forEach((line, lineIndex) => {
     const lineStartCol = leftMargin;
