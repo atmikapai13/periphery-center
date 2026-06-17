@@ -14,39 +14,114 @@ import v8 from '../assets/video/PXL_20260228_204021205.mp4';
 import v9 from '../assets/video/PXL_20260228_210324961.mp4';
 
 const VIDEOS = [v1, v2, v3, v4, v5, v6, v7, v8, v9];
+const COUNT = VIDEOS.length;
 
+// Two video buffers ping-pong: while one plays, the other preloads the *next*
+// clip, so advancing is an instant opacity swap with no black load gap.
 function VideoPlaylist() {
-  const [index, setIndex] = useState(0);
-  // When stopped, the video is hidden so only the black background shows.
+  // slots[0]/slots[1] = the clip index currently assigned to buffer A / B.
+  const [slots, setSlots] = useState<[number, number]>([0, COUNT > 1 ? 1 : 0]);
+  // Which buffer is the one on screen / playing.
+  const [active, setActive] = useState<0 | 1>(0);
+  // When stopped, both buffers hide so only the black background shows.
   const [stopped, setStopped] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Reload + play whenever the source changes (changing `src` alone doesn't
-  // restart playback reliably).
+  const refA = useRef<HTMLVideoElement>(null);
+  const refB = useRef<HTMLVideoElement>(null);
+  const refs = [refA, refB] as const;
+
+  // Whenever the active buffer changes, queue the *following* clip into the
+  // now-inactive buffer and start fetching it so it's ready before it's needed.
   useEffect(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    el.load();
-    el.play().catch(() => {});
-  }, [index]);
+    if (COUNT < 2) return;
+    const inactive = active === 0 ? 1 : 0;
+    setSlots((prev) => {
+      const nextIdx = (prev[active] + 1) % COUNT;
+      if (prev[inactive] === nextIdx) return prev;
+      const copy: [number, number] = [prev[0], prev[1]];
+      copy[inactive] = nextIdx;
+      return copy;
+    });
+  }, [active]);
 
-  const goPrev = () => setIndex((i) => (i - 1 + VIDEOS.length) % VIDEOS.length);
-  const goNext = () => setIndex((i) => (i + 1) % VIDEOS.length);
-  const play = () => {
-    setStopped(false); // bring the video background back
-    videoRef.current?.play().catch(() => {});
+  // Kick off buffering on the inactive element whenever its queued clip changes.
+  useEffect(() => {
+    if (COUNT < 2) return;
+    const inactive = active === 0 ? 1 : 0;
+    refs[inactive].current?.load();
+  }, [slots]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Play the active buffer from the start whenever it changes.
+  useEffect(() => {
+    if (stopped) return;
+    const el = refs[active].current;
+    if (el) {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    }
+  }, [active, stopped]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Active clip finished → flip to the other (already-preloaded) buffer.
+  const handleEnded = () => {
+    if (COUNT < 2) {
+      const el = refs[active].current;
+      if (el) {
+        el.currentTime = 0;
+        el.play().catch(() => {});
+      }
+      return;
+    }
+    setActive((a) => (a === 0 ? 1 : 0));
   };
-  const pause = () => videoRef.current?.pause();
+
+  // Manual jump: load the target into the inactive buffer, then make it active.
+  // (A manual jump may show a brief load since the target wasn't preloaded.)
+  const jumpTo = (target: number) => {
+    if (COUNT < 2) return;
+    setStopped(false);
+    const inactive = active === 0 ? 1 : 0;
+    setSlots((prev) => {
+      const copy: [number, number] = [prev[0], prev[1]];
+      copy[inactive] = (target + COUNT) % COUNT;
+      return copy;
+    });
+    setActive(inactive);
+  };
+
+  const goPrev = () => jumpTo(slots[active] - 1);
+  const goNext = () => jumpTo(slots[active] + 1);
+  const play = () => {
+    setStopped(false);
+    refs[active].current?.play().catch(() => {});
+  };
+  const pause = () => refs[active].current?.pause();
   const stop = () => {
-    setStopped(true); // hide the video → black background
-    const el = videoRef.current;
-    if (!el) return;
-    el.pause();
-    el.currentTime = 0;
+    setStopped(true);
+    refs.forEach((r) => {
+      const el = r.current;
+      if (el) {
+        el.pause();
+        el.currentTime = 0;
+      }
+    });
   };
 
   return (
     <div className="video-playlist">
+      <div className="video-stage">
+        {[0, 1].map((i) => (
+          <video
+            key={i}
+            ref={refs[i]}
+            className={`video-playlist-player${active === i && !stopped ? ' is-active' : ''}`}
+            src={VIDEOS[slots[i]]}
+            muted
+            playsInline
+            preload="auto"
+            onEnded={active === i ? handleEnded : undefined}
+          />
+        ))}
+      </div>
       <div className="video-playlist-controls">
         <button type="button" onClick={goPrev} aria-label="Previous clip">
           <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -77,16 +152,6 @@ function VideoPlaylist() {
           </svg>
         </button>
       </div>
-      <video
-        ref={videoRef}
-        className="video-playlist-player"
-        src={VIDEOS[index]}
-        autoPlay
-        muted
-        playsInline
-        onEnded={goNext}
-        style={{ visibility: stopped ? 'hidden' : 'visible' }}
-      />
     </div>
   );
 }

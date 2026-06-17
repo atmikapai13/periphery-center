@@ -100,6 +100,12 @@
   object-position: center;
 }
 
+/* Hover region for the slideshow — hugs the image so cursor X maps to its
+   full width. Block-level, no extra box so it doesn't affect layout. */
+.slideshow-hover {
+  display: block;
+}
+
 .about-description {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.4rem;
@@ -305,6 +311,30 @@
   font-size: 1.4rem;
 }
 
+/* Desktop only: lift the transport controls out of the footage into their own
+   row beneath the video, keeping the full-bleed video + blended principles.
+   Scoped to min-width so it never overrides the mobile (≤768px) layout. */
+@media (min-width: 769px) {
+  /* Let the controls show below the section instead of being clipped. The video
+     uses object-fit: cover so it never spills its box — visible is safe here. */
+  .build-section {
+    padding-bottom: 0rem;
+    overflow: visible;
+  }
+
+  /* Video fills the section to the edge. */
+  .build-section .video-playlist {
+    inset: 0 0 0rem 0;
+  }
+
+  /* Drop the controls into their own row directly below the video, centered. */
+  .build-section .video-playlist-controls {
+    top: 100%;
+    bottom: auto;
+    margin-top: 1rem;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
 
@@ -316,6 +346,15 @@
   .about-description {
     font-size: 1.2rem;
     max-width: none;
+  }
+
+  /* Consistent vertical gap between sections on mobile. Desktop keeps the larger
+     staggered spacing; here every section gets the same top margin and no bottom
+     padding, so the gap between any two sections is identical regardless of how
+     tall each section's content is (e.g. the short "How We Act"). */
+  .principle-section {
+    margin-top: 5rem;
+    padding-bottom: 0;
   }
 
   .principles-grid {
@@ -354,6 +393,8 @@
        padding); desktop keeps the 2rem inset. */
     padding-left: 0;
     padding-right: 0;
+    /* Same top gap as the other sections (overrides the desktop 6rem). */
+    margin-top: 5rem;
   }
 
   /* Mobile build order: title → video (with controls) → principles, stacked in

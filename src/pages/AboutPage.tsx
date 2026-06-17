@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, type MouseEvent } from 'react';
 import '../styles/AboutPage.css';
 import BorromeanKnot from '../components/BorromeanKnot';
 import Tetrahedron from '../components/Tetrahedron';
@@ -42,21 +42,50 @@ function AboutPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(
     () => Math.floor(Math.random() * slideshowImages.length)
   );
+  // Reveal duration for the *current* image; set when the image changes so it
+  // never restarts mid-animation. Default 5s (the un-hovered speed).
+  const [revealDuration, setRevealDuration] = useState(5000);
+  // Hover speed multiplier driven by cursor X over the image: 0.5x (far left)
+  // → 1x (center) → 2x (far right). 1x when not hovering. A ref so cursor moves
+  // don't trigger re-renders. Read live by the slideshow ticker below.
+  const speedRef = useRef(1);
 
-  // Slideshow effect - change to a random image each tick (no immediate repeat)
+  // Slideshow effect - advance to a random image (no immediate repeat). Driven
+  // by a progress accumulator that fills at the current hover speed, so moving
+  // the cursor right speeds the whole cycle up and left slows it down.
   useEffect(() => {
+    if (slideshowImages.length <= 1) return;
+    const CYCLE_MS = 8000; // 5s decrypt reveal + 3s holding sharp, at 1x
+    const TICK = 50;
+    let progress = 0;
     const interval = setInterval(() => {
+      progress += TICK * speedRef.current;
+      if (progress < CYCLE_MS) return;
+      progress = 0;
+      // Snapshot the speed so this image's reveal stays proportional to its hold.
+      const speed = speedRef.current;
+      setRevealDuration(Math.round(5000 / speed));
       setCurrentImageIndex((prevIndex) => {
-        if (slideshowImages.length <= 1) return prevIndex;
         // Pick uniformly among all images except the current one.
         let next = Math.floor(Math.random() * (slideshowImages.length - 1));
         if (next >= prevIndex) next += 1;
         return next;
       });
-    }, 8000); // 5s decrypt reveal + 3s holding sharp
+    }, TICK);
 
     return () => clearInterval(interval);
   }, []);
+
+  // Map cursor X within the image to the speed multiplier (geometric so center
+  // is exactly 1x): left edge → 0.5x, center → 1x, right edge → 2x.
+  const handleSlideshowMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const f = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+    speedRef.current = Math.pow(2, 2 * f - 1);
+  };
+  const handleSlideshowMouseLeave = () => {
+    speedRef.current = 1;
+  };
   return (
     <div className="about-page-new">
       {/* Binary background decoration */}
@@ -70,13 +99,22 @@ function AboutPage() {
           <strong>The Periphery Center</strong> is a <strong>living culture lab:</strong> a space designed for the collective human experience, where contemporary art and technology convene to enrich everyday communal practice with high artistic achievement and counter disembodied media.
         </p>
 
-        <DecryptingImage
-          src={slideshowImages[currentImageIndex]}
-          duration={5000}
-          direction={currentImageIndex % 2 === 0 ? 'out' : 'in'}
-          animateOnMount={false}
-          className="content-background-image"
-        />
+        {/* Hover wrapper: cursor X position over the image scales the slideshow
+            speed (right = faster, left = slower). DecryptingImage doesn't
+            forward DOM events, so the handlers live on this wrapper. */}
+        <div
+          className="slideshow-hover"
+          onMouseMove={handleSlideshowMouseMove}
+          onMouseLeave={handleSlideshowMouseLeave}
+        >
+          <DecryptingImage
+            src={slideshowImages[currentImageIndex]}
+            duration={revealDuration}
+            direction={currentImageIndex % 2 === 0 ? 'out' : 'in'}
+            animateOnMount={true}
+            className="content-background-image"
+          />
+        </div>
 
         {/* Core Principles Section */}
         <section className="principle-section knot-section">

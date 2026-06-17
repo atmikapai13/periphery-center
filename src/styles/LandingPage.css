@@ -432,7 +432,7 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .binary-matrix {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .binary-page {
@@ -449,7 +449,7 @@
 
 @media (max-width: 480px) {
   .binary-matrix {
-    font-size: 10px;
+    font-size: 13px;
   }
 
   .binary-arrows {

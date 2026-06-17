@@ -6,14 +6,30 @@
   z-index: 0;
 }
 
-/* Cover the whole section (portrait clips fill height & crop sides — no bars). */
+/* Holds the two stacked video buffers and defines the visible video area. */
+.video-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Both buffers are layered on top of each other; only the active one is shown.
+   Cover the stage (portrait clips fill height & crop sides — no bars). The swap
+   is an instant opacity flip (no transition) since the next clip is preloaded. */
 .video-playlist-player {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
   object-fit: cover;
   object-position: center;
   background-color: #000000;
+  opacity: 0;
+}
+
+.video-playlist-player.is-active {
+  opacity: 1;
 }
 
 /* Transport controls pinned to the bottom of the player, above the footage. */
@@ -56,7 +72,9 @@
 }
 
 @media (max-width: 768px) {
-  .video-playlist-player {
+  /* Size the video for mobile; controls stay overlaid at the bottom of the
+     footage (base styles), same as desktop's in-video position. */
+  .video-stage {
     height: 38dvh;
   }
 }
