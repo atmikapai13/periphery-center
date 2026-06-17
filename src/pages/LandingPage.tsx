@@ -1,73 +1,168 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBinaryDecryptionEffect } from '../hooks/useBinaryDecryptionEffect';
+import { calculateBinaryGroups } from '../utils/binaryGroupCalculator';
 import '../styles/LandingPage.css';
 
-const TITLE_LINES = ["THE", "PERIPHERY", "CENTER"];
+// Animation timing (ms). Background binaries radially scramble (Phase 2A), then
+// disappear in random chunks (Phase 2B); the title binaries stay bright throughout.
+const REVEAL_DURATION = 5000; // Phase 2A (1.5s) + Phase 2B (3.5s)
+const SCRAMBLE_END = 1500;
+const FADE_DURATION = 3500;
+const FRAME_INTERVAL = 40; // redraw cadence (~25fps) — canvas is cheap, but this
+                           // caps work on weak mobile CPUs without visible stutter.
+
+// Grid sizing. Lower REQUIRED_COLS → bigger binary cells (and a bigger title).
+const REF_FONT = 12;
+const MIN_FONT = 4;
+const REQUIRED_COLS = 38;
+
+// How fast the radial digit churn moves. <1 = calmer/slower flicker (the total
+// 7s animation length is unaffected — this only slows the decrypt/encrypt shimmer).
+const SCRAMBLE_SPEED = 0.15;
+
+// Deterministic circular scramble digit for a background cell (ported from the
+// old per-cell hook, but now evaluated straight into the canvas draw).
+function scrambleChar(row: number, col: number, cols: number, rows: number, elapsed: number): string {
+  const t = elapsed * SCRAMBLE_SPEED;
+  const distance = Math.sqrt((row - rows / 2) ** 2 + (col - cols / 2) ** 2);
+  const wave = Math.sin(distance * 0.3 - t * 0.01);
+  const scrambleIndex = Math.floor(wave * 4 + t * 0.005);
+  return Math.abs(scrambleIndex) % 2 === 0 ? '0' : '1';
+}
+
+// Deterministic per-chunk disappearance during Phase 2B.
+function chunkDisappeared(row: number, col: number, fadeProgress: number): boolean {
+  if (fadeProgress >= 0.9) return true;
+  const chunkSize = 8;
+  const chunkSeed = (Math.floor(row / chunkSize) * 17 + Math.floor(col / chunkSize) * 23) % 100;
+  return fadeProgress > (chunkSeed / 100) * 0.85;
+}
 
 function LandingPage() {
   const navigate = useNavigate();
-  const [gridDimensions, setGridDimensions] = useState({ width: 0, height: 0 });
-  // Binary-matrix font size in px. Shrinks on narrow screens so the embedded
-  // title (esp. "PERIPHERY") still fits one line; capped at 12px on desktop.
-  const [fontSize, setFontSize] = useState(12);
-  const [animationStarted, setAnimationStarted] = useState(false);
-  const measureRef = useRef<HTMLSpanElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [isComplete, setIsComplete] = useState(false);
+  // The matrix's computed cell font size, surfaced so the corner arrows can
+  // render at the exact same size as the binary title text.
+  const [matrixFontSize, setMatrixFontSize] = useState(REF_FONT);
 
-  // Initialize grid dimensions
   useEffect(() => {
-    // The title's letter stride adapts to the grid width (see binaryGroupCalculator),
-    // so the title always fits. Aiming for more columns just makes the binary cells
-    // (and thus the title) smaller on narrow screens; desktop caps at REF_FONT.
-    const REF_FONT = 12;       // desktop / reference size
-    const MIN_FONT = 4;        // never go smaller than this
-    const REQUIRED_COLS = 60;  // higher target → smaller binary cells on mobile
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
 
-    const calculateGridDimensions = () => {
-      const el = measureRef.current;
-      if (!el) return;
-      el.style.lineHeight = '1.4';
+    let active = true;
+    let rafId = 0;
+    let startTime = 0;
+    let lastDraw = -Infinity;
 
-      const paddingInPx = 32;
-      const availableWidth = window.innerWidth - paddingInPx;
-      const availableHeight = window.innerHeight - paddingInPx + 20;
+    // Grid config (recomputed on setup + resize).
+    let cols = 0;
+    let rows = 0;
+    let fontSize = REF_FONT;
+    let cellW = 10;
+    let lineH = 17;
+    let textPositions = new Set<string>();
+    const LEFT = 32; // 2rem, matches the page's left padding
+    const TOP = 16; // 1rem
 
-      // Pass 1: measure a "digit + space" cell at the 12px reference to choose a
-      // target font size that fits REQUIRED_COLS columns.
-      el.style.fontSize = `${REF_FONT}px`;
-      el.textContent = '0 ';
-      const charWidth12 = el.offsetWidth || 10;
+    const bgFont = () => `400 ${fontSize}px "JetBrains Mono", "Roboto Mono", monospace`;
+    const titleFont = () => `700 ${fontSize}px "JetBrains Mono", "Roboto Mono", monospace`;
 
-      const maxCellForFit = availableWidth / (REQUIRED_COLS + 1);
-      const nextFontSize = Math.max(
-        MIN_FONT,
-        Math.min(REF_FONT, REF_FONT * (maxCellForFit / charWidth12))
-      );
+    const computeGrid = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      canvas.style.width = `${W}px`;
+      canvas.style.height = `${H}px`;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Pass 2: re-measure at the chosen size to get the REAL rendered cell width.
-      // If a mobile browser clamps/boosts tiny fonts, this captures it, so the
-      // grid math matches what's actually drawn (no overflow, title stays centered).
-      el.style.fontSize = `${nextFontSize}px`;
-      el.textContent = '0 ';
-      const realCharWidth = el.offsetWidth || charWidth12 * (nextFontSize / REF_FONT);
-      // Derive the actually-rendered px size from the width ratio, then the line
-      // height (matching the matrix's line-height: 1.4).
-      const actualFont = REF_FONT * (realCharWidth / charWidth12);
-      const realLineHeight = actualFont * 1.4;
+      const availableWidth = W - 48; // left 2rem + right 1rem
+      const availableHeight = H - 24;
 
-      const digitsPerLine = Math.floor(availableWidth / realCharWidth) - 1;
-      const lineCount = Math.floor(availableHeight / realLineHeight);
+      // Pass 1: at the reference size, choose a font that fits REQUIRED_COLS.
+      ctx.font = `400 ${REF_FONT}px "JetBrains Mono", "Roboto Mono", monospace`;
+      const charWidthRef = ctx.measureText('0 ').width || 10;
+      const maxCell = availableWidth / (REQUIRED_COLS + 1);
+      fontSize = Math.max(MIN_FONT, Math.min(REF_FONT, REF_FONT * (maxCell / charWidthRef)));
 
-      setFontSize(nextFontSize);
-      setGridDimensions({ width: digitsPerLine, height: lineCount });
+      // Pass 2: measure the real cell stride at the chosen size.
+      ctx.font = bgFont();
+      cellW = ctx.measureText('0 ').width || charWidthRef * (fontSize / REF_FONT);
+      lineH = fontSize * 1.4;
+
+      cols = Math.max(1, Math.floor(availableWidth / cellW) - 1);
+      rows = Math.max(1, Math.floor(availableHeight / lineH));
+      textPositions = calculateBinaryGroups(cols, rows).textPositions;
+      setMatrixFontSize(fontSize); // keep the corner arrows in sync with the title
     };
 
-    // Wait for the binary-matrix web font (JetBrains Mono, both weights) to load
-    // before measuring/rendering the grid. Otherwise the browser draws the
-    // fallback monospace first and swaps to JetBrains Mono mid-animation, which
-    // both shifts the glyphs and throws off the measured grid metrics.
-    let active = true;
-    const initWhenFontReady = async () => {
+    const draw = (elapsed: number) => {
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, W, H);
+      ctx.textBaseline = 'top';
+
+      const fadeProgress = elapsed > SCRAMBLE_END ? (elapsed - SCRAMBLE_END) / FADE_DURATION : -1;
+
+      // Background binaries (grey, no glow) — batched in one style.
+      ctx.font = bgFont();
+      ctx.shadowBlur = 0;
+      ctx.fillStyle = 'rgba(177, 176, 176, 0.42)'; // #b1b0b06a
+      for (let row = 0; row < rows; row++) {
+        const y = TOP + row * lineH;
+        for (let col = 0; col < cols; col++) {
+          if (textPositions.has(`${row},${col}`)) continue;
+          if (fadeProgress >= 0 && chunkDisappeared(row, col, fadeProgress)) continue;
+          ctx.fillText(scrambleChar(row, col, cols, rows, elapsed), LEFT + col * cellW, y);
+        }
+      }
+
+      // Title binaries (bright white, bold, soft glow) — drawn once on top.
+      ctx.font = titleFont();
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
+      ctx.shadowBlur = Math.max(2, fontSize * 0.5);
+      textPositions.forEach((key) => {
+        const comma = key.indexOf(',');
+        const row = Number(key.slice(0, comma));
+        const col = Number(key.slice(comma + 1));
+        const ch = (row + col) % 2 === 0 ? '1' : '0';
+        ctx.fillText(ch, LEFT + col * cellW, TOP + row * lineH);
+      });
+      ctx.shadowBlur = 0;
+    };
+
+    const loop = () => {
+      if (!active) return;
+      const now = Date.now();
+      const elapsed = now - startTime;
+      if (elapsed >= REVEAL_DURATION) {
+        draw(REVEAL_DURATION); // final frame: only the bright title binaries remain
+        setIsComplete(true);
+        return;
+      }
+      if (now - lastDraw >= FRAME_INTERVAL) {
+        draw(elapsed);
+        lastDraw = now;
+      }
+      rafId = requestAnimationFrame(loop);
+    };
+
+    const start = () => {
+      computeGrid();
+      setIsComplete(false);
+      startTime = Date.now();
+      lastDraw = -Infinity;
+      rafId = requestAnimationFrame(loop);
+    };
+
+    // Wait for JetBrains Mono (both weights) so glyph metrics match the draw and
+    // there's no fallback-font flash, then start.
+    (async () => {
       try {
         await Promise.all([
           document.fonts.load('400 12px "JetBrains Mono"'),
@@ -75,136 +170,39 @@ function LandingPage() {
         ]);
         await document.fonts.ready;
       } catch {
-        /* If the Font Loading API is unavailable, fall through and render anyway. */
+        /* Font Loading API unavailable — render with the fallback anyway. */
       }
-      if (active) calculateGridDimensions();
-    };
-    initWhenFontReady();
+      if (active) start();
+    })();
 
-    const handleResize = () => {
-      calculateGridDimensions();
-      setAnimationStarted(false); // Restart animation on resize
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (!active) return;
+        cancelAnimationFrame(rafId);
+        start();
+      }, 150);
     };
+    window.addEventListener('resize', onResize);
 
-    window.addEventListener('resize', handleResize);
     return () => {
       active = false;
-      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(rafId);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
-  // Use the binary decryption effect
-  const { binaryGrid, decryptionState, isComplete } = useBinaryDecryptionEffect({
-    text: TITLE_LINES,
-    gridWidth: gridDimensions.width,
-    gridHeight: gridDimensions.height,
-    measureRef,
-    fontSize,
-    fontFamily: 'JetBrains Mono, Roboto Mono, monospace'
-  });
-
-  // Mark animation as started when grid is ready
-  useEffect(() => {
-    if (binaryGrid.length > 0 && !animationStarted) {
-      setAnimationStarted(true);
-    }
-  }, [binaryGrid.length, animationStarted]);
-
-  // Sequential phases - Clean visual hierarchy
-  const renderBinaryChar = (char: any, rowIndex: number, colIndex: number) => {
-    const { char: character, phase, glitchIntensity, shouldRemain, revealProgress = 0 } = char;
-
-    let className = 'binary-char';
-    let displayChar = character || '0';
-
-    if (phase === 'transitioning') {
-      if (shouldRemain) {
-        // PHASE 1: Text emergence - CSS handles smooth transition
-        if (revealProgress > 0.7) {
-          className += ' text-emerged';
-        } else {
-          className += ' text-emerging';
-        }
-      } else {
-        // PHASE 2: Background processing - simple scramble then fade
-        if (character) {
-          // Apply background phase classes based on revealProgress indicators
-          if (revealProgress >= 1.0) {
-            className += ' background-faded'; // Direct disappear
-          } else {
-            className += ' background-scrambling'; // Scrambling phase
-          }
-        }
-      }
-    } else if (phase === 'revealed') {
-      // Final bright text state
-      className += ' revealed';
-    }
-
-    // Apply glitch effects only during background phase
-    if (!shouldRemain && glitchIntensity > 0.3) {
-      className += ' glitch-flicker';
-    }
-
-    // Handle empty characters for faded background
-    if (!character && phase === 'transitioning' && !shouldRemain) {
-      displayChar = ' ';
-    }
-
-    return (
-      <span
-        key={`${rowIndex}-${colIndex}`}
-        className={className}
-      >
-        {displayChar}
-      </span>
-    );
-  };
-
-  // Render a binary line
-  const renderBinaryLine = (row: any[], rowIndex: number) => {
-    const elements = [];
-
-    for (let colIndex = 0; colIndex < row.length; colIndex++) {
-      const char = row[colIndex];
-      elements.push(renderBinaryChar(char, rowIndex, colIndex));
-
-      // Add space between characters (except last one)
-      if (colIndex < row.length - 1) {
-        elements.push(' ');
-      }
-    }
-
-    return elements;
-  };
-
   return (
     <div className="binary-page">
-      <span ref={measureRef} style={{
-        position: 'absolute',
-        visibility: 'hidden',
-        fontSize: '12px',
-        fontFamily: 'JetBrains Mono, Roboto Mono, monospace',
-        whiteSpace: 'pre'
-      }} />
-
-      <div className="binary-matrix" style={{ fontSize: `${fontSize}px` }}>
-        {binaryGrid.map((row, rowIndex) => (
-          <div key={rowIndex} className="binary-line">
-            {renderBinaryLine(row, rowIndex)}
-          </div>
-        ))}
-      </div>
+      <canvas ref={canvasRef} className="binary-canvas" />
 
       {/* Clickable overlay appears when animation is complete */}
       {isComplete && (
         <div
           className="title-overlay"
-          style={{
-            opacity: 1,
-            cursor: 'pointer',
-            pointerEvents: 'all'
-          }}
+          style={{ opacity: 1, cursor: 'pointer', pointerEvents: 'all' }}
           onClick={() => navigate('/about')}
         >
           <div className="title-text" style={{ opacity: 0 }}>
@@ -217,39 +215,39 @@ function LandingPage() {
 
       {/* Binary arrow indicators at bottom right */}
       {isComplete && (
-        <div className="binary-arrows">
+        <div className="binary-arrows" style={{ fontSize: `${matrixFontSize}px` }}>
           <div className="arrow-pattern">
             <div className="arrow-row">
               {Array.from('            1').map((char, i) => (
-                <span key={i} className="binary-digit" style={{animationDelay: `${i * 0.1}s`}}>
+                <span key={i} className="binary-digit" style={{ animationDelay: `${i * 0.1}s` }}>
                   {char}
                 </span>
               ))}
             </div>
             <div className="arrow-row">
               {Array.from('            1 1').map((char, i) => (
-                <span key={i} className="binary-digit" style={{animationDelay: `${i * 0.1}s`}}>
+                <span key={i} className="binary-digit" style={{ animationDelay: `${i * 0.1}s` }}>
                   {char}
                 </span>
               ))}
             </div>
             <div className="arrow-row">
               {Array.from('1 0 1 1 0 1 0 0 1').map((char, i) => (
-                <span key={i} className="binary-digit" style={{animationDelay: `${i * 0.1}s`}}>
+                <span key={i} className="binary-digit" style={{ animationDelay: `${i * 0.1}s` }}>
                   {char}
                 </span>
               ))}
             </div>
             <div className="arrow-row">
               {Array.from('            0 1').map((char, i) => (
-                <span key={i} className="binary-digit" style={{animationDelay: `${i * 0.1}s`}}>
+                <span key={i} className="binary-digit" style={{ animationDelay: `${i * 0.1}s` }}>
                   {char}
                 </span>
               ))}
             </div>
             <div className="arrow-row">
               {Array.from('            0').map((char, i) => (
-                <span key={i} className="binary-digit" style={{animationDelay: `${i * 0.1}s`}}>
+                <span key={i} className="binary-digit" style={{ animationDelay: `${i * 0.1}s` }}>
                   {char}
                 </span>
               ))}

@@ -344,7 +344,9 @@
   }
 
   .about-description {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    line-height: 1.1;
     max-width: none;
   }
 
@@ -353,7 +355,7 @@
      padding, so the gap between any two sections is identical regardless of how
      tall each section's content is (e.g. the short "How We Act"). */
   .principle-section {
-    margin-top: 5rem;
+    margin-top: 7rem;
     padding-bottom: 0;
   }
 

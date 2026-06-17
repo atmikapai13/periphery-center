@@ -12,6 +12,16 @@
   left: 0;
 }
 
+/* Canvas-rendered binary matrix — fills the viewport, sits behind the title
+   overlay and arrows. Sizing is set in JS (CSS px + devicePixelRatio scaling). */
+.binary-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  z-index: 0;
+}
+
 .binary-matrix {
   color: #b1b0b06a;
   font-size: 12px;
