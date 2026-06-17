@@ -105,9 +105,10 @@ export function calculateBinaryGroups(
   }
 
   // Calculate layout systematically: left-aligned (leftMargin) and the block is
-  // vertically centered within the matrix (no upward bias).
+  // vertically centered within the matrix, then nudged up by 5% of the height.
   const totalTextHeight = lines.length * lineStride;
-  const startRow = Math.max(0, Math.floor((gridHeight - totalTextHeight) / 2));
+  const centerRow = Math.floor((gridHeight - totalTextHeight) / 2);
+  const startRow = Math.max(0, centerRow - Math.floor(gridHeight * 0.05));
 
   lines.forEach((line, lineIndex) => {
     const lineStartCol = leftMargin;
