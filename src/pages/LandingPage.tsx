@@ -14,11 +14,11 @@ const FRAME_INTERVAL = 40; // redraw cadence (~25fps) — canvas is cheap, but t
 // Grid sizing. Lower REQUIRED_COLS → bigger binary cells (and a bigger title).
 const REF_FONT = 12;
 const MIN_FONT = 4;
-const REQUIRED_COLS = 45;
+const REQUIRED_COLS = 55;
 // Extra breathing room between binary cells (>1 spreads them apart). Widens the
 // cell stride without changing the digit size; the column count auto-adjusts so
 // the title still fits.
-const CHAR_SPACING = 1.2;
+const CHAR_SPACING = 1.1;
 
 // How fast the radial digit churn moves. <1 = calmer/slower flicker (the total
 // 7s animation length is unaffected — this only slows the decrypt/encrypt shimmer).
