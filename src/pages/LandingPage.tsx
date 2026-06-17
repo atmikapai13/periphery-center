@@ -14,7 +14,11 @@ const FRAME_INTERVAL = 40; // redraw cadence (~25fps) — canvas is cheap, but t
 // Grid sizing. Lower REQUIRED_COLS → bigger binary cells (and a bigger title).
 const REF_FONT = 12;
 const MIN_FONT = 4;
-const REQUIRED_COLS = 38;
+const REQUIRED_COLS = 45;
+// Extra breathing room between binary cells (>1 spreads them apart). Widens the
+// cell stride without changing the digit size; the column count auto-adjusts so
+// the title still fits.
+const CHAR_SPACING = 1.2;
 
 // How fast the radial digit churn moves. <1 = calmer/slower flicker (the total
 // 7s animation length is unaffected — this only slows the decrypt/encrypt shimmer).
@@ -88,10 +92,11 @@ function LandingPage() {
       const maxCell = availableWidth / (REQUIRED_COLS + 1);
       fontSize = Math.max(MIN_FONT, Math.min(REF_FONT, REF_FONT * (maxCell / charWidthRef)));
 
-      // Pass 2: measure the real cell stride at the chosen size.
+      // Pass 2: measure the real cell stride at the chosen size, then widen it
+      // (and the line height) by CHAR_SPACING so the cells aren't cramped.
       ctx.font = bgFont();
-      cellW = ctx.measureText('0 ').width || charWidthRef * (fontSize / REF_FONT);
-      lineH = fontSize * 1.4;
+      cellW = (ctx.measureText('0 ').width || charWidthRef * (fontSize / REF_FONT)) * CHAR_SPACING;
+      lineH = fontSize * 1.4 * CHAR_SPACING;
 
       cols = Math.max(1, Math.floor(availableWidth / cellW) - 1);
       rows = Math.max(1, Math.floor(availableHeight / lineH));

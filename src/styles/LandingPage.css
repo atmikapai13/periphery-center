@@ -403,7 +403,6 @@
   font-weight: bold;
   text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
   pointer-events: none;
-  transform: scale(1.05);
 }
 
 .arrow-pattern {
@@ -435,7 +434,6 @@
   30% {
     opacity: 1.0;
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
-    transform: scale(1.1);
   }
 }
 
