@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navigation from './components/Navigation';
-import HomePage from './pages/HomePage';
+import LandingPage from './pages/LandingPage';
 import AboutPage from './pages/AboutPage';
 
 
@@ -15,7 +15,7 @@ function AppContent() {
       {!hideNav && <Navigation />}
       <main className={isFixedPage ? 'main-full' : ''}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<AboutPage />} />
       
         </Routes>
@@ -26,7 +26,7 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <AppContent />
     </Router>
   );

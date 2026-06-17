@@ -1,256 +1,438 @@
-.about-page {
-  background-color: #ffe7b6; {/* anthropic beige: EBDBBC */}
+/* New About Page Styles */
+.about-page-new {
+  background-color: #000000;
   min-height: 100vh;
   width: 100%;
-  padding: 3rem 2rem;
-  font-family: Helvetica, Arial, sans-serif;
+  padding: 1rem 1rem 5rem 1rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  box-sizing: border-box;
+  color: #ffffff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Binary background decoration */
+.binary-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.15;
+  font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+  font-size: 12px;
+  color: #ffffff;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+/* Main Footer Section */
+.about-main-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: #000000;
+  padding: 0.5rem 1rem;
   margin: 0;
   box-sizing: border-box;
 }
 
-.about-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: #ffe7b6;
-  padding: 1.5rem 2rem;
-  z-index: 99;
+.about-main-footer-inner {
+  max-width: 95vw;
+  margin: 0 auto;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-
-.about-logo {
-  width: auto;
-  display: block;
-  transition: height 0.05s ease-out;
-}
-
-.about-logo.logo-fixed {
-  position: relative;
-  top: 0;
-  left: 0;
-  z-index: 100;
-}
-
-.section-title {
-  color: #000000;
-  font-family: "Styrene A", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 2.0rem;
-  font-weight: 500;
-  margin: 0.3rem 0 1rem 0;
-  text-align: left;
-}
-
-.about-content {
-  max-width: 1000px;
-  color: #000000;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1.0rem;
-  line-height: 1.6;
-  font-weight: 400;
-  text-align: left;
-}
-
-.about-content h3 {
-  font-size: 1.0rem;
-  font-weight: 500;
-  margin: 0 0 1rem 0;
-}
-
-.about-content p {
-  margin: 0 0 1.0rem 0;
-}
-
-.about-content p:last-child {
-  margin-bottom: 0;
-}
-
-.about-content p.tight-bottom {
-  margin-bottom: -0.2rem;
-}
-
-.build-section {
-  display: flex;
-  gap: 3rem;
-  margin-top: 2rem;
-  align-items: center;
-}
-
-.build-text {
-  flex: 1;
-  max-width: 500px;
-}
-
-.build-text h3 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: #000000;
-  margin: 0 0 1rem 0;
-}
-
-.build-text h3:not(:first-child) {
-  margin-top: 2rem;
-}
-
-.build-text p {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #000000;
-  margin: 0;
-}
-
-.diagram-figure {
-  flex: 1;
-  max-width: 600px;
-}
-
-.diagram-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0;
-}
-
-.diagram-caption {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.8rem;
-  font-style: italic;
-  color: #000000;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
   text-align: right;
-  margin-top: 0.5rem;
 }
 
-/* HOW WE OPERATE - Card Grid */
-.operate-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  margin-top: 2rem;
-  margin-bottom: 4rem;
+/* Contact email, bottom-left of the footer. */
+.about-footer-email {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
+  color: #ffffff;
+  text-decoration: none;
+  letter-spacing: 0.02em;
 }
 
-.operate-card {
+.about-footer-email:hover {
+  text-decoration: underline;
+}
+
+.about-title {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.0rem;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.about-subtitle {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 0rem 0 0 0;
+  letter-spacing: 0.02em;
+}
+
+/* Content Section */
+.about-content {
+  max-width: 95vw;
+  margin: 0 auto;
+}
+
+.content-background-image {
+  width: 100%;
+  height: 70vh;
+  display: block;
+  border-radius: 0px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about-description {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  line-height: 1.3;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+  max-width: 75vw;
+  word-spacing: 5%;
+}
+
+/* Core Principles Section */
+.principle-section {
+  margin-top: 10rem;
+  position: relative;
   display: flex;
   flex-direction: column;
-  background: transparent;
+  box-sizing: border-box;
+  padding-bottom: 2rem;
 }
 
-.card-image {
-  position: relative;
+/* Rotating chrome knot occupies the top-right grid cell — beside "Human
+   Experience" and directly above "Enrich the Everyday". pointer-events
+   re-enabled so it stays draggable inside the content layer (which has
+   pointer-events: none). */
+.knot-canvas {
+  grid-column: 2;
+  grid-row: 1;
   width: 100%;
-  aspect-ratio: 16 / 9;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 0;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 1s ease;
+  height: 350px; /*borromean size*/
+  /* Float up so it isn't bounded by the cell / "Human Experience" top. */
+  margin-top: -2rem;
+  /* Nudge the knot slightly left within its cell. */
+  transform: translateX(-8rem);
+  /* Sit above the grid/text so nothing clips or covers the knot. */
+  z-index: 20;
+  pointer-events: auto;
 }
 
-.card-image:hover {
-  transform: scale(0.98);
+/* Rotating chrome tetrahedron in the "How We Act" section. Desktop: lower-left
+   cell (col 1 / row 2), nudged right and overlapping the row below. */
+.tetra-canvas {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  height: 280px;
+  margin-top: -1rem;
+  margin-bottom: -6rem;
+  transform: translateX(12rem);
+  z-index: 100;
+  pointer-events: auto;
 }
 
-.card-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.85);
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+/* Desktop placement for "Rhythm Over Rules" (centered + nudged down in its cell). */
+.tetra-section .principle-right {
+  align-self: center;
+  transform: translateY(3rem);
+}
+
+/* Three explicit rows so each heading gets its own band; align-content:
+   space-between then spreads them evenly down the viewport.
+   Row 1: "Human Experience" (left) + knot (right)
+   Row 2: "Enrich the Everyday" (right)
+   Row 3: "Collective by Default" (left) */
+.principle-top {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.principle-right {
+  grid-column: 2;
+  grid-row: 2;
+  /* Pull up so the text overlaps the knot above it... */
+  margin-top: -6rem;
+  /* ...and sit above the knot (z-index: 20) so the text reads on top. */
+  z-index: 30;
+}
+
+.principle-bottom {
+  /* Span the full bottom row so the whole row is a hover target. The text
+     keeps its own max-width, so it still reads as a left-aligned block. */
+  grid-column: 1 / -1;
+  grid-row: 3;
+  /* Re-enable pointer events (the content layer sets pointer-events: none) so
+     the cursor-following preview can be triggered. */
+  pointer-events: auto;
+}
+
+/* Even though the bottom row spans both columns (for the hover target), cap its
+   text to a single column width so it lines up with the top-left paragraph
+   rather than stretching to the generic 60vw. 50% - 1rem = one 1fr column given
+   the grid's 2rem column-gap. */
+.principle-bottom .principle-text {
+  max-width: calc(50% - 1rem);
+}
+
+.principle-section-content {
+  position: relative;
   z-index: 2;
+  pointer-events: none;
+  /* Grow to fill the section so the grid can distribute its rows. */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.card-image:hover .card-overlay {
-  opacity: 1;
-}
-
-.card-description {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.6;
+.principle-section-title {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0 0 2rem 0;
   color: #ffffff;
-  margin: 0;
-  text-align: left;
 }
 
-.card-info {
-  padding: 1rem 0;
+/* Tighten the title gap whenever a subtitle follows (e.g. "APPROACH" / "HOW WE ACT"). */
+.principle-section-title:has(+ .principle-section-subtitle) {
+  margin-bottom: 0.5rem;
 }
 
-.card-title {
-  font-family: "Styrene A", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #000000;
-  margin: 0 0 0.5rem 0;
+.principle-section-subtitle {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0 0 2rem 0;
+  color: #ffffff;
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  column-gap: 2rem;
+  row-gap: 3.5rem;
+  /* Stack the three rows from the top with a fixed gap rather than spreading
+     them across the full viewport. */
+  flex: 1;
+  align-content: start;
+}
+
+.principle-heading {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
   line-height: 1.2;
+  margin: 0 0 0.4rem 0;
+  color: #ffffff;
 }
 
-.card-tagline {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 0.875rem;
+.principle-text {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.8rem;
   font-weight: 400;
-  color: #000000;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
   margin: 0;
-  font-style: italic;
+  color: #ffffff;
+  max-width: 45vw;
+}
+
+/* What We Build — full-bleed video with the four mechanics overlaid on top.
+   isolation: isolate makes the section a self-contained blend group so the
+   overlaid text blends only with the video, not with anything behind it. */
+.build-section {
+  /* Slightly shorter than the viewport so the video doesn't claim the whole
+     screen / section. */
+  min-height: 85dvh;
+  height: 85dvh;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 2rem;
+  /* A bit less top gap than the other sections so it sits as one screen. */
+  margin-top: 6rem;
+}
+
+/* Title sits above the video (plain white, no blend). */
+.build-title {
+  position: relative;
+  z-index: 1;
+}
+
+.build-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  column-gap: 2rem;
+  row-gap: 1.5rem;
+  /* Fill the leftover section height so the four cells spread evenly. */
+  flex: 1;
+  /* Layer above the video and blend the text into the footage. The text is
+     non-interactive so clicks fall through to the controls beneath. */
+  position: relative;
+  z-index: 1;
+  mix-blend-mode: exclusion;
+  pointer-events: none;
+}
+
+/* Smaller headings in this section only. */
+.build-grid .principle-heading {
+  font-size: 1.4rem;
 }
 
 /* Responsive adjustments */
-@media (max-width: 1024px) {
-  .operate-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 768px) {
-  .about-page {
-    padding: 2rem 1.5rem;
+
+  /* Footer "The Periphery Center" — smaller on mobile. */
+  .about-title {
+    font-size: 0.8rem;
   }
 
-  .about-title {
-    font-size: 2.5rem;
+  .about-description {
+    font-size: 1.2rem;
+    max-width: none;
+  }
+
+  .principles-grid {
+    grid-template-columns: 1fr;
+    row-gap: 2.5rem;
+  }
+
+  /* Let headings/paragraphs use the full container width on mobile. */
+  .principle-heading,
+  .principle-text,
+  .principle-bottom .principle-text {
+    max-width: none;
+  }
+
+  .build-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    row-gap: 2.5rem;
+    /* Stack below the video in normal flow — drop the desktop blend/overlay so
+       the principles read on black with no overlap onto the footage. */
+    order: 3;
+    mix-blend-mode: normal;
+  }
+
+  /* On mobile, match the build section's heading size to the other sections
+     (desktop keeps the smaller 1.4rem headings set above). */
+  .build-grid .principle-heading {
+    font-size: 2rem;
   }
 
   .build-section {
-    flex-direction: column;
-    gap: 2rem;
+    min-height: 0;
+    height: auto;
+    overflow: visible;
+    /* Match the other sections' horizontal alignment (they have no side
+       padding); desktop keeps the 2rem inset. */
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  .build-accordion,
-  .diagram-figure {
-    max-width: 100%;
+  /* Mobile build order: title → video (with controls) → principles, stacked in
+     flow. Desktop keeps the video as a full-bleed backdrop behind the text. */
+  .build-title {
+    order: 1;
   }
 
-  .operate-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  /* Scoped to beat VideoPlaylist.css's `.video-playlist { position: absolute }`
+     (media queries don't add specificity, so plain `.video-playlist` could lose
+     the cascade by source order). */
+  .build-section .video-playlist {
+    position: relative;
+    inset: auto;
+    order: 2;
+    margin: 1.5rem 0;
   }
 
-  .card-content {
-    padding: 1.5rem;
+  .principle-left,
+  .principle-right {
+    grid-column: 1;
   }
 
-  .card-overlay {
-    padding: 1.5rem;
+  /* Reset the desktop overlap so everything stacks cleanly on mobile. */
+  .knot-canvas,
+  .tetra-canvas,
+  .principle-top,
+  .principle-right,
+  .principle-bottom,
+  .principle-fourth {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: 0;
+  }
+
+  /* Core Principles + How We Act on mobile: the 3D shape becomes a backdrop
+     behind the principle texts (instead of taking its own block), and the text
+     inverts where it crosses the shape — same blend idea as the video section. */
+  .knot-section .principles-grid,
+  .tetra-section .principles-grid {
+    position: relative;
+    isolation: isolate; /* contain the shape<->text blend */
+  }
+
+  .knot-section .knot-canvas,
+  .tetra-section .tetra-canvas {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 320px;
+    margin: 0;
+    transform: translateY(-50%); /* center it behind the stack */
+    z-index: -1;                 /* sit behind the principle text */
+    pointer-events: auto;        /* still draggable */
+  }
+
+  .knot-section .principle-heading,
+  .knot-section .principle-text,
+  .tetra-section .principle-heading,
+  .tetra-section .principle-text {
+    mix-blend-mode: exclusion;
+  }
+
+  /* Undo the desktop nudge on "Rhythm Over Rules" so all three principles keep
+     an even gap when stacked. */
+  .tetra-section .principle-right {
+    transform: none;
+    align-self: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .about-page {
-    padding: 1.5rem 1rem;
+  .about-title {
+    font-size: 0.75rem;
   }
 
-  .about-title {
-    font-size: 2rem;
+  .about-subtitle {
+    font-size: 1rem;
   }
 }

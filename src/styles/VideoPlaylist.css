@@ -1,0 +1,62 @@
+/* Full-bleed background layer that fills the build section. Negative z-index
+   keeps it behind the in-flow overlay text so the text can blend onto it. */
+.video-playlist {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Cover the whole section (portrait clips fill height & crop sides — no bars). */
+.video-playlist-player {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  background-color: #000000;
+}
+
+/* Transport controls pinned to the bottom of the player, above the footage. */
+.video-playlist-controls {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 1.4rem;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.video-playlist-controls button {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  line-height: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+.video-playlist-controls button:hover {
+  opacity: 1;
+}
+
+.video-playlist-controls button:active {
+  transform: scale(0.92);
+}
+
+.video-playlist-controls svg {
+  width: 22px;
+  height: 22px;
+  fill: #ffffff;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .video-playlist-player {
+    height: 38dvh;
+  }
+}

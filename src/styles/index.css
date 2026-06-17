@@ -2,6 +2,9 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
 
+/* Import pixel-perfect fonts for binary decryption effect */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap');
+
 @font-face {
   font-family: 'Styrene A';
   src: url('/src/assets/StyreneA-Regular-Trial-BF63f6cbd970ee9.otf') format('opentype');
@@ -153,6 +156,11 @@ body {
   margin: 0;
   overflow-x: hidden;
   max-width: 100%;
+  /* Prevent mobile browsers from auto-inflating ("boosting") small text, which
+     would render the binary-matrix font larger than specified and break the
+     JS-computed grid layout. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 #root {
@@ -292,3 +300,26 @@ code {
     @apply bg-background text-foreground;}
   html {
     @apply font-sans;}}
+
+/* Black & white scrollbar — softened white thumb so it's not glaring */
+* {
+  scrollbar-color: #7d7d7d #000000; /* thumb track — Firefox */
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7e7e7e;
+  border: 2px solid #000000;
+}
+
+::-webkit-scrollbar-corner {
+  background: #000000;
+}

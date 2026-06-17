@@ -1,186 +1,194 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import '../styles/AboutPage.css';
-import lacanTriangle from '../assets/Lacan_triangle_reinterpreted.png';
-import logo from '../assets/logo.png';
-import Footer from '../components/Footer';
+import BorromeanKnot from '../components/BorromeanKnot';
+import Tetrahedron from '../components/Tetrahedron';
+import DecryptingImage from '../components/DecryptingImage';
+import VideoPlaylist from '../components/VideoPlaylist';
+
+// Import all images from assets/pictures
+import img1 from '../assets/pictures/IMG_20160904_121250.jpg';
+import img2 from '../assets/pictures/IMG_20170417_103442.jpg';
+import img3 from '../assets/pictures/IMG_20170417_104107.jpg';
+import img4 from '../assets/pictures/PXL_20231119_024224867.MP.jpg';
+import img5 from '../assets/pictures/PXL_20231209_021136418.jpg';
+import img6 from '../assets/pictures/PXL_20231209_021452315.jpg';
+import img7 from '../assets/pictures/PXL_20240803_174206901.jpg';
+import img8 from '../assets/pictures/PXL_20240803_174209771.MP.jpg';
+import img9 from '../assets/pictures/PXL_20240803_201635523.MP.jpg';
+import img10 from '../assets/pictures/PXL_20240804_021227374.MP.jpg';
+import img11 from '../assets/pictures/PXL_20240804_021802629.MP.jpg';
+import img12 from '../assets/pictures/PXL_20240921_030606796.MP.jpg';
+import img13 from '../assets/pictures/PXL_20241103_052314152.jpg';
+import img14 from '../assets/pictures/PXL_20250601_025007114.jpg';
+import img15 from '../assets/pictures/PXL_20250601_043748687.jpg';
+import img16 from '../assets/pictures/PXL_20260131_185112498.jpg';
+import img17 from '../assets/pictures/PXL_20260131_190133410.jpg';
+import img18 from '../assets/pictures/PXL_20260131_190741872.jpg';
+import img19 from '../assets/pictures/PXL_20260131_192544486.jpg';
+import img20 from '../assets/pictures/PXL_20260131_192832486.jpg';
+import img21 from '../assets/pictures/PXL_20260131_200123704.jpg';
+import img22 from '../assets/pictures/PXL_20260228_190228489.MP.jpg';
+import img23 from '../assets/pictures/PXL_20260228_190251704.MP.jpg';
+import img24 from '../assets/pictures/PXL_20260228_192502898.jpg';
+import img25 from '../assets/pictures/PXL_20260301_040011833.MP.jpg';
+
+const slideshowImages = [
+  img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,
+  img11, img12, img13, img14, img15, img16, img17, img18, img19, img20,
+  img21, img22, img23, img24, img25
+];
 
 function AboutPage() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [currentImageIndex, setCurrentImageIndex] = useState(
+    () => Math.floor(Math.random() * slideshowImages.length)
+  );
 
+  // Slideshow effect - change to a random image each tick (no immediate repeat)
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const maxScroll = 400;
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => {
+        if (slideshowImages.length <= 1) return prevIndex;
+        // Pick uniformly among all images except the current one.
+        let next = Math.floor(Math.random() * (slideshowImages.length - 1));
+        if (next >= prevIndex) next += 1;
+        return next;
+      });
+    }, 8000); // 5s decrypt reveal + 3s holding sharp
 
-      const progress = Math.min(1, scrollPosition / maxScroll);
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => clearInterval(interval);
   }, []);
-
-  // Calculate logo size: 350px -> 100px
-  const logoHeight = 350 - (scrollProgress * 250); // 350 - 230 = 120
-
   return (
-    <div className="about-page">
-      <div className="about-header">
-        <img
-          src={logo}
-          alt="The Periphery Center"
-          className="about-logo logo-fixed"
-          style={{
-            height: `${logoHeight}px`,
-          }}
+    <div className="about-page-new">
+      {/* Binary background decoration */}
+      <div className="binary-background"></div>
+
+      {/* Content sections */}
+      <div className="about-content" style={{ position: 'relative', zIndex: 10 }}>
+        
+        
+        <p className="about-description">
+          <strong>The Periphery Center</strong> is a <strong>living culture lab:</strong> a space designed for the collective human experience, where contemporary art and technology convene to enrich everyday communal practice with high artistic achievement and counter disembodied media.
+        </p>
+
+        <DecryptingImage
+          src={slideshowImages[currentImageIndex]}
+          duration={5000}
+          direction={currentImageIndex % 2 === 0 ? 'out' : 'in'}
+          animateOnMount={false}
+          className="content-background-image"
         />
-      </div>
-      <div style={{ height: `${logoHeight + 5}px` }} />
-      <h2 className="section-title">MANIFESTO</h2>
-      <div className="about-content">
-          <p>The Periphery Center is a <strong>living culture lab.</strong></p>
 
-          <p className="tight-bottom">Up until the 20th century, religion defined culture.</p>
-          <p>Now, capitalism and consumerism control much of it, with digital media as its vehicle.</p>
-
-          <p className="tight-bottom">But, this is very sadly not an embodied experience.</p>
-          <p>(except perhaps TikTok dances?)</p>
-
-          <p>The Periphery Center believes that <strong>creativity is a core element of a healthy community.</strong></p>
-
-          <p className="tight-bottom">Through workshops, events, and festivals with artists, technologists, and the masses, </p>
-          <p>we cultivate a <strong>Third Space for the Sociotechnical Realm.</strong></p>
-
-          
-      </div>
-
-      <h2 className="section-title" style={{ marginTop: '3.5rem' }}>WHAT WE BUILD</h2>
-
-      <div className="build-section">
-          <figure className="diagram-figure">
-            <img src={lacanTriangle} alt="Lacan triangle reinterpreted diagram" className="diagram-image" />
-            <figcaption className="diagram-caption">*Inspired by the Lacanian RSI Triad</figcaption>
-          </figure>
-
-          <div className="build-text">
-            <h3>Ritualized & the Sublime</h3>
-            <p>
-              Experiences must connect everyday communal practice with high artistic achievement, without a rigid wall separating them. Think of habitual practices that are rooted in ritual, reaching for the sublime.
-            </p>
-            <h3>Collective by Default</h3>
-            <p>
-              We build for the "we," not the "me." Our output must physically pull people together, with borders so porous that stepping into the collective is effortless. If an experience can be fully realized by one person alone, or requires an invite to join the group, it does not belong here.
-            </p>
-            <h3>Radical Embodiment</h3>
-            <p>
-              All technology explored here must engage the body and physical co-presence. We build for the physical world, enhancing human experiences to counter disembodied media.
-            </p>
-          </div>
-      </div>
-
-      <h2 className="section-title" style={{ marginTop: '3.5rem' }}>HOW WE OPERATE</h2>
-
-      <div className="operate-grid">
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  The tools we build must be intuitive enough for a stranger to grasp instantly, yet deep and expressive enough for a dedicated artist to achieve true virtuosity.
-                </p>
-              </div>
+        {/* Core Principles Section */}
+        <section className="principle-section knot-section">
+          <div className="principle-section-content">
+          <h2 className="principle-section-title">Core Principles</h2>
+          <div className="principles-grid">
+            <div className="principle principle-left principle-top">
+              <h3 className="principle-heading">Our focus is Human Experience.</h3>
+              <p className="principle-text">
+                We only seek &amp; explore technologies that engage the body and physical co-presence. We build for the physical world, enhancing human experiences to counter disembodied media. We revel in sensorial experiences that engage the full spectrum of our senses and physics to transform passive viewers into active participants.
+              </p>
             </div>
-            <div className="card-info">
-              <h3 className="card-title">Low Floor, No Ceiling</h3>
-              <p className="card-tagline">Immediate Entry, Endless Virtuosity</p>
+            {/* Rotating chrome Borromean rings, draggable. Top-right cell:
+                beside "Human Experience", above "Enrich the Everyday". */}
+            <div className="knot-canvas">
+              <BorromeanKnot />
+            </div>
+            <div className="principle principle-right">
+              <h3 className="principle-heading">Enrich the Everyday &amp; the Elevated.</h3>
+              <p className="principle-text">
+                Our sensorial experiences must connect everyday communal practice with high artistic achievement, without a rigid wall separating them.
+              </p>
+            </div>
+            <div className="principle principle-left principle-bottom">
+              <h3 className="principle-heading">We are Collective by Default.</h3>
+              <p className="principle-text">
+                We build for the "we," not the "me." Our output must physically pull people together, with borders so porous that stepping into the collective is effortless. If an experience can be fully realized by one person alone, or requires an invite to join the group, it does not belong here.
+              </p>
             </div>
           </div>
+          </div>
+        </section>
 
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  The environment allows people to move fluidly between observing, participating, and creating. The roles are not locked.
-                </p>
-              </div>
+        {/* Approach Section — same staggered layout as Core Principles */}
+        <section className="principle-section tetra-section">
+          <div className="principle-section-content">
+          <h2 className="principle-section-title">HOW WE ACT</h2>
+          <div className="principles-grid">
+            <div className="principle principle-left principle-top">
+              <h3 className="principle-heading">Think with your Hands.</h3>
+              <p className="principle-text">
+                We prioritize rapid proofs of concept and embrace a comfort with failure. We don't write speculative white papers; we build it, test it on the floor, and see what breaks.
+              </p>
             </div>
-            <div className="card-info">
-              <h3 className="card-title">The Open Floor</h3>
-              <p className="card-tagline">Watch. Join. Make.</p>
+            {/* Rotating chrome tetrahedron, draggable. Positioned via .tetra-canvas
+                (desktop: lower-left cell; mobile: backdrop behind the text). */}
+            <div className="tetra-canvas">
+              <Tetrahedron />
+            </div>
+            <div className="principle principle-right">
+              <h3 className="principle-heading">Rhythm Over Rules.</h3>
+              <p className="principle-text">
+                Innovation thrives on humanized, structured time. The daily, weekly, and monthly happenings provide the positive pressure and heartbeat needed to sustain the community.
+              </p>
+            </div>
+            <div className="principle principle-left principle-bottom">
+              <h3 className="principle-heading">Lived, Not Lectured.</h3>
+              <p className="principle-text">
+                Culture cannot be assigned. The environment is designed for exploration where understanding emerges through a community's active relationship with the medium.
+              </p>
             </div>
           </div>
-
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  We prioritize rapid proofs of concept and embrace a comfort with failure. We don't write speculative white papers; we build it, test it on the floor, and see what breaks.
-                </p>
-              </div>
-            </div>
-            <div className="card-info">
-              <h3 className="card-title">Think With Your Hands</h3>
-              <p className="card-tagline">Predict Through Doing</p>
-            </div>
           </div>
+        </section>
 
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  Innovation thrives on humanized, structured time. The daily, weekly, and monthly happenings provide the positive pressure and heartbeat needed to sustain the community.
-                </p>
-              </div>
+        {/* What We Build — full-bleed video with the four mechanics overlaid,
+            blending into the footage (mix-blend-mode: exclusion). */}
+        <section className="principle-section build-section">
+          <VideoPlaylist />
+          <h2 className="principle-section-title build-title">What We Build</h2>
+          <div className="build-grid">
+            <div className="principle">
+              <h3 className="principle-heading">Exchange Over Extraction.</h3>
+              <p className="principle-text">
+                While consumerism acts like a living medium, its creative pole is gatekept. We distribute value through shared creation and non-consumption-based models, ensuring the generative act belongs to the community.
+              </p>
             </div>
-            <div className="card-info">
-              <h3 className="card-title">Rhythm Over Rules</h3>
-              <p className="card-tagline">Rituals, Not Process</p>
+            <div className="principle">
+              <h3 className="principle-heading">Temporal, not Fixed.</h3>
+              <p className="principle-text">
+                A living medium should not be slave to a captured moment. We acknowledge the human relationship with time&mdash;experiences that unfold, shift states, and naturally conclude, rather than trapping people in a perpetual loop of spectacle.
+              </p>
             </div>
-          </div>
+            <div className="principle">
+              <h3 className="principle-heading">Low Floor, No Ceiling.</h3>
+              <p className="principle-text">
+                The tools we build must be intuitive enough for a stranger to grasp instantly, yet deep and expressive enough for a dedicated artist to achieve true virtuosity.
+              </p>
+            </div>
+            
+            <div className="principle">
+              <h3 className="principle-heading">Watch. Join. Make.</h3>
+              <p className="principle-text">
+                The environment allows people to move fluidly between observing, participating, and creating. The roles are not locked.
+              </p>
+            </div>
 
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  Culture cannot be assigned. The environment is designed for exploration where understanding emerges through a community's active relationship with the medium.
-                </p>
-              </div>
-            </div>
-            <div className="card-info">
-              <h3 className="card-title">Emergent, Not Dictated</h3>
-              <p className="card-tagline">Lived, Not Lectured</p>
-            </div>
           </div>
+        </section>
 
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  While consumerism acts like a living medium, its creative pole is gatekept. We distribute value through shared creation and non-consumption-based models, ensuring the generative act belongs to the community.
-                </p>
-              </div>
-            </div>
-            <div className="card-info">
-              <h3 className="card-title">Exchange Over Extraction</h3>
-              <p className="card-tagline">Culture, Not Commodities</p>
-            </div>
-          </div>
-
-          <div className="operate-card">
-            <div className="card-image">
-              <div className="card-overlay">
-                <p className="card-description">
-                  A living medium should not be slave to a captured moment. We acknowledge the human relationship with time—experiences that unfold, shift states, and naturally conclude, rather than trapping people in a perpetual loop of spectacle.
-                </p>
-              </div>
-            </div>
-            <div className="card-info">
-              <h3 className="card-title">Temporal, Not Fixed</h3>
-              <p className="card-tagline">Design for the Moment</p>
-            </div>
-          </div>
       </div>
 
-      <Footer />
+      {/* Footer Section */}
+      <footer className="about-main-footer">
+        <div className="about-main-footer-inner">
+          <a className="about-footer-email" href="mailto:hello@peripherycenter.com">hello@peripherycenter.com</a>
+          <div className="about-footer-titles">
+            <h1 className="about-title">The Periphery Center</h1>
+            <h1 className="about-title" style={{ fontWeight: 300, letterSpacing: '0.05em', fontSize: '0.8rem' }}>A Living Culture Lab</h1>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
