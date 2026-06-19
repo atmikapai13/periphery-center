@@ -6,36 +6,25 @@ import DecryptingImage from '../components/DecryptingImage';
 import VideoPlaylist from '../components/VideoPlaylist';
 
 // Import all images from assets/pictures
-import img1 from '../assets/pictures/IMG_20160904_121250.jpg';
-import img2 from '../assets/pictures/IMG_20170417_103442.jpg';
-import img3 from '../assets/pictures/IMG_20170417_104107.jpg';
-import img4 from '../assets/pictures/PXL_20231119_024224867.MP.jpg';
-import img5 from '../assets/pictures/PXL_20231209_021136418.jpg';
-import img6 from '../assets/pictures/PXL_20231209_021452315.jpg';
-import img7 from '../assets/pictures/PXL_20240803_174206901.jpg';
-import img8 from '../assets/pictures/PXL_20240803_174209771.MP.jpg';
-import img9 from '../assets/pictures/PXL_20240803_201635523.MP.jpg';
-import img10 from '../assets/pictures/PXL_20240804_021227374.MP.jpg';
-import img11 from '../assets/pictures/PXL_20240804_021802629.MP.jpg';
-import img12 from '../assets/pictures/PXL_20240921_030606796.MP.jpg';
-import img13 from '../assets/pictures/PXL_20241103_052314152.jpg';
-import img14 from '../assets/pictures/PXL_20250601_025007114.jpg';
-import img15 from '../assets/pictures/PXL_20250601_043748687.jpg';
-import img16 from '../assets/pictures/PXL_20260131_185112498.jpg';
-import img17 from '../assets/pictures/PXL_20260131_190133410.jpg';
-import img18 from '../assets/pictures/PXL_20260131_190741872.jpg';
-import img19 from '../assets/pictures/PXL_20260131_192544486.jpg';
-import img20 from '../assets/pictures/PXL_20260131_192832486.jpg';
-import img21 from '../assets/pictures/PXL_20260131_200123704.jpg';
-import img22 from '../assets/pictures/PXL_20260228_190228489.MP.jpg';
-import img23 from '../assets/pictures/PXL_20260228_190251704.MP.jpg';
-import img24 from '../assets/pictures/PXL_20260228_192502898.jpg';
-import img25 from '../assets/pictures/PXL_20260301_040011833.MP.jpg';
+import img1 from '../assets/pictures/IMG_20160831_125703.jpg';
+import img2 from '../assets/pictures/IMG_20160902_180353.jpg';
+import img3 from '../assets/pictures/IMG_20160904_121250.jpg';
+import img4 from '../assets/pictures/IMG_20170417_103442.jpg';
+import img5 from '../assets/pictures/IMG_20170417_104107.jpg';
+import img6 from '../assets/pictures/PXL_20231119_024224867.MP.jpg';
+import img7 from '../assets/pictures/PXL_20240921_030606796.MP.jpg';
+import img8 from '../assets/pictures/PXL_20260131_185112498.jpg';
+import img9 from '../assets/pictures/PXL_20260131_190133410.jpg';
+import img10 from '../assets/pictures/PXL_20260131_190741872.jpg';
+import img11 from '../assets/pictures/PXL_20260131_192544486.jpg';
+import img12 from '../assets/pictures/PXL_20260131_192832486.jpg';
+import img13 from '../assets/pictures/PXL_20260131_200123704.jpg';
+import img14 from '../assets/pictures/PXL_20260228_192502898.jpg';
+import img15 from '../assets/pictures/PXL_20260301_040011833.MP.jpg';
 
 const slideshowImages = [
   img1, img2, img3, img4, img5, img6, img7, img8, img9, img10,
-  img11, img12, img13, img14, img15, img16, img17, img18, img19, img20,
-  img21, img22, img23, img24, img25
+  img11, img12, img13, img14, img15
 ];
 
 function AboutPage() {
@@ -93,10 +82,10 @@ function AboutPage() {
 
       {/* Content sections */}
       <div className="about-content" style={{ position: 'relative', zIndex: 10 }}>
-        
-        
+
+
         <p className="about-description">
-          <strong>The Periphery Center</strong> is a <strong>living culture lab:</strong> a space designed for the collective human experience, where contemporary art and technology convene to enrich everyday communal practice with high artistic achievement and counter disembodied media.
+          <strong>The Periphery Center</strong> is a <strong>living culture lab:</strong> a practice focused on building community through the creative exploration of technology, space and ritual as our cultural medium.
         </p>
 
         {/* Hover wrapper: cursor X position over the image scales the slideshow
@@ -119,96 +108,96 @@ function AboutPage() {
         {/* Core Principles Section */}
         <section className="principle-section knot-section">
           <div className="principle-section-content">
-          <h2 className="principle-section-title">Core Principles</h2>
-          <div className="principles-grid">
-            <div className="principle principle-left principle-top">
-              <h3 className="principle-heading">Our focus is Human Experience.</h3>
-              <p className="principle-text">
-                We only seek &amp; explore technologies that engage the body and physical co-presence. We build for the physical world, enhancing human experiences to counter disembodied media. We revel in sensorial experiences that engage the full spectrum of our senses and physics to transform passive viewers into active participants.
-              </p>
-            </div>
-            {/* Rotating chrome Borromean rings, draggable. Top-right cell:
+            <h2 className="principle-section-title">Core Principles</h2>
+            <div className="principles-grid">
+              <div className="principle principle-left principle-top">
+                <h3 className="principle-heading">Senses &amp; Physics.</h3>
+                <p className="principle-text">
+                  All technology explored must engage the body and the spaces we inhabit. We build for the physical world, enhancing human experiences.
+                </p>
+              </div>
+              {/* Rotating chrome Borromean rings, draggable. Top-right cell:
                 beside "Human Experience", above "Enrich the Everyday". */}
-            <div className="knot-canvas">
-              <BorromeanKnot />
+              <div className="knot-canvas">
+                <BorromeanKnot />
+              </div>
+              <div className="principle principle-right">
+                <h3 className="principle-heading">The Everyday &amp; The Elevated.</h3>
+                <p className="principle-text">
+                  Experiences must connect everyday communal practice with high artistic achievement, without a rigid wall separating them.
+                </p>
+              </div>
+              <div className="principle principle-left principle-bottom">
+                <h3 className="principle-heading">Cultivate &amp; Circulate.</h3>
+                <p className="principle-text">
+                  Our output must physically pull people together, with borders so porous that stepping into the collective is effortless, creating access to enable anyone to sculpt experiences in time and space.
+                </p>
+              </div>
             </div>
-            <div className="principle principle-right">
-              <h3 className="principle-heading">Enrich the Everyday &amp; the Elevated.</h3>
-              <p className="principle-text">
-                Our sensorial experiences must connect everyday communal practice with high artistic achievement, without a rigid wall separating them.
-              </p>
-            </div>
-            <div className="principle principle-left principle-bottom">
-              <h3 className="principle-heading">We are Collective by Default.</h3>
-              <p className="principle-text">
-                We build for the "we," not the "me." Our output must physically pull people together, with borders so porous that stepping into the collective is effortless. If an experience can be fully realized by one person alone, or requires an invite to join the group, it does not belong here.
-              </p>
-            </div>
-          </div>
           </div>
         </section>
 
         {/* Approach Section — same staggered layout as Core Principles */}
         <section className="principle-section tetra-section">
           <div className="principle-section-content">
-          <h2 className="principle-section-title">HOW WE ACT</h2>
-          <div className="principles-grid">
-            <div className="principle principle-left principle-top">
-              <h3 className="principle-heading">Think with your Hands.</h3>
-              <p className="principle-text">
-                We prioritize rapid proofs of concept and embrace a comfort with failure. We don't write speculative white papers; we build it, test it on the floor, and see what breaks.
-              </p>
-            </div>
-            {/* Rotating chrome tetrahedron, draggable. Positioned via .tetra-canvas
+            <h2 className="principle-section-title">OUR PRACTICE</h2>
+            <div className="principles-grid">
+              <div className="principle principle-left principle-top">
+                <h3 className="principle-heading">Think with your Hands.</h3>
+                <p className="principle-text">
+                  We prioritize rapid proof-of-concept development and embrace a comfort with failure. We build it, test it on the floor, and see what breaks.
+                </p>
+              </div>
+              {/* Rotating chrome tetrahedron, draggable. Positioned via .tetra-canvas
                 (desktop: lower-left cell; mobile: backdrop behind the text). */}
-            <div className="tetra-canvas">
-              <Tetrahedron />
+              <div className="tetra-canvas">
+                <Tetrahedron />
+              </div>
+              <div className="principle principle-right">
+                <h3 className="principle-heading">Rhythm Over Rules.</h3>
+                <p className="principle-text">
+                  Innovation thrives on rituals: humanized, structured time. The daily, weekly, and monthly happenings provide the positive pressure and heartbeat needed to sustain the community.
+                </p>
+              </div>
+              <div className="principle principle-left principle-bottom">
+                <h3 className="principle-heading">Lived, Not Lectured.</h3>
+                <p className="principle-text">
+                  The environment and the practices are designed for exploration where understanding emerges through a community's active relationship with the medium.
+                </p>
+              </div>
             </div>
-            <div className="principle principle-right">
-              <h3 className="principle-heading">Rhythm Over Rules.</h3>
-              <p className="principle-text">
-                Innovation thrives on humanized, structured time. The daily, weekly, and monthly happenings provide the positive pressure and heartbeat needed to sustain the community.
-              </p>
-            </div>
-            <div className="principle principle-left principle-bottom">
-              <h3 className="principle-heading">Lived, Not Lectured.</h3>
-              <p className="principle-text">
-                Culture cannot be assigned. The environment is designed for exploration where understanding emerges through a community's active relationship with the medium.
-              </p>
-            </div>
-          </div>
           </div>
         </section>
 
-        {/* What We Build — full-bleed video with the four mechanics overlaid,
+        {/* What We Make — full-bleed video with the four mechanics overlaid,
             blending into the footage (mix-blend-mode: exclusion). */}
         <section className="principle-section build-section">
           <VideoPlaylist />
-          <h2 className="principle-section-title build-title">What We Build</h2>
+          <h2 className="principle-section-title build-title">WHAT WE MAKE</h2>
           <div className="build-grid">
             <div className="principle">
               <h3 className="principle-heading">Exchange Over Extraction.</h3>
               <p className="principle-text">
-                While consumerism acts like a living medium, its creative pole is gatekept. We distribute value through shared creation and non-consumption-based models, ensuring the generative act belongs to the community.
-              </p>
-            </div>
-            <div className="principle">
-              <h3 className="principle-heading">Temporal, not Fixed.</h3>
-              <p className="principle-text">
-                A living medium should not be slave to a captured moment. We acknowledge the human relationship with time&mdash;experiences that unfold, shift states, and naturally conclude, rather than trapping people in a perpetual loop of spectacle.
+                While consumerism acts like a living medium, its creative access is gatekept. We distribute value through shared creation and non-consumption-based models, ensuring the creative act belongs to the community.
               </p>
             </div>
             <div className="principle">
               <h3 className="principle-heading">Low Floor, No Ceiling.</h3>
               <p className="principle-text">
-                The tools we build must be intuitive enough for a stranger to grasp instantly, yet deep and expressive enough for a dedicated artist to achieve true virtuosity.
+                What we build must be intuitive enough for a stranger to grasp instantly, yet deep and expressive enough for a dedicated artist to achieve true virtuosity.
               </p>
             </div>
-            
+            <div className="principle">
+              <h3 className="principle-heading">Temporal, not Fixed.</h3>
+              <p className="principle-text">
+                We acknowledge the human relationship with time—experiences that unfold, shift states, and naturally evolve, rather than trapping people in a perpetual loop of spectacle. A living medium should not be beholden to a captured moment.
+              </p>
+            </div>
+
             <div className="principle">
               <h3 className="principle-heading">Watch. Join. Make.</h3>
               <p className="principle-text">
-                The environment allows people to move fluidly between observing, participating, and creating. The roles are not locked.
+                Enabling people to move fluidly between observing, participating, and creating. The roles are not locked.
               </p>
             </div>
 

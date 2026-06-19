@@ -293,16 +293,26 @@
 .build-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto auto;
   column-gap: 2rem;
   row-gap: 1.5rem;
-  /* Fill the leftover section height so the four cells spread evenly. */
-  flex: 1;
-  /* Layer above the video and blend the text into the footage. The text is
-     non-interactive so clicks fall through to the controls beneath. */
+  /* Max width and auto margins center the grid block horizontally & vertically */
+  max-width: 900px;
+  width: 100%;
+  margin: auto auto;
   position: relative;
   z-index: 1;
-  mix-blend-mode: exclusion;
+  mix-blend-mode: normal;
+  pointer-events: none;
+}
+
+/* Darkening overlay over the video to improve text contrast */
+.build-section .video-playlist::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -327,11 +337,39 @@
     inset: 0 0 0rem 0;
   }
 
+  /* Centered desktop grid nudged upwards */
+  .build-grid {
+    transform: translateY(-2.5rem);
+  }
+
   /* Drop the controls into their own row directly below the video, centered. */
   .build-section .video-playlist-controls {
     top: 100%;
     bottom: auto;
     margin-top: 1rem;
+  }
+
+  /* Glassmorphism card styling for desktop overlaid text blocks */
+  .build-grid .principle {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.5rem 1.75rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .build-grid .principle:hover {
+    background: rgba(0, 0, 0, 0.45);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -379,6 +417,8 @@
        the principles read on black with no overlap onto the footage. */
     order: 3;
     mix-blend-mode: normal;
+    margin: 1.5rem 0 0 0;
+    max-width: none;
   }
 
   /* On mobile, match the build section's heading size to the other sections

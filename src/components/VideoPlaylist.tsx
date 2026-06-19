@@ -3,16 +3,11 @@ import '../styles/VideoPlaylist.css';
 
 // Clips from assets/video. They play one at a time, muted + autoplaying, and
 // auto-advance through the list (wrapping), so the player runs continuously.
-import v2 from '../assets/video/PXL_20240808_162248102.mp4';
-import v3 from '../assets/video/PXL_20241103_052321118.mp4';
-import v4 from '../assets/video/PXL_20260131_190139239~2.mp4';
-import v5 from '../assets/video/PXL_20260228_035446843.mp4';
-import v6 from '../assets/video/PXL_20260228_195309633.mp4';
-import v7 from '../assets/video/PXL_20260228_195637719.mp4';
-import v8 from '../assets/video/PXL_20260228_204021205.mp4';
-import v9 from '../assets/video/PXL_20260228_210324961.mp4';
+import v1 from '../assets/video/PXL_20240808_162248102.mp4';
+import v2 from '../assets/video/PXL_20260131_190139239~2.mp4';
+import v3 from '../assets/video/PXL_20260228_195637719.mp4';
 
-const VIDEOS = [v2, v3, v4, v5, v6, v7, v8, v9];
+const VIDEOS = [v1, v2, v3];
 const COUNT = VIDEOS.length;
 
 // Two video buffers ping-pong: while one plays, the other preloads the *next*
