@@ -275,7 +275,7 @@ function AboutPage() {
           {/* Your Brevo Code - Height increased to fit the full form and captcha */}
           <iframe
             width="100%"
-            height="460"
+            height="490"
             src="https://2c936e86.sibforms.com/v2/serve/MUIFAGZ5TIrpsi4D4Rd2DllBiG_U2RgtNxkCv81FlswvCw8e0TAlaNJRxhOVtKloxJ8aJCdLZAPPHdSrwqnGsJ8bCiFCdkyxZw9fHhJ51Pw_sc0Iu1sqs5KojcqvcWv1GG6aMMN49b9P2y95LZ-_zWVueMHiEA6j3ywm2iYaC9bTgxWh5q_P2ES0JpS7JNrIhDKHtFYAG-oQqJoknw=="
             allowFullScreen
             style={{ display: 'block', border: 'none', width: '100%' }}
