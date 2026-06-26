@@ -1,0 +1,212 @@
+.newsletter-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 8rem;
+  margin-bottom: 8rem; /* Leave room for the fixed footer at bottom */
+  padding: 0 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.newsletter-card {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 2.5rem 2.5rem;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.newsletter-card:hover {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Titles */
+.newsletter-title {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 1.6rem !important;
+  font-weight: bold !important;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem 0;
+  color: #ffffff !important;
+  text-align: left !important;
+  background-color: transparent !important;
+}
+
+.newsletter-subtitle {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 0.85rem !important;
+  line-height: 1.4;
+  margin: 0 0 2rem 0;
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-align: left !important;
+  background-color: transparent !important;
+}
+
+/* Form block container override */
+.sib-form {
+  background-color: transparent !important;
+  text-align: left !important;
+}
+
+#sib-container {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  max-width: none !important;
+  border-radius: 0 !important;
+  direction: ltr !important;
+}
+
+/* Label styling */
+.sib-form .entry__label {
+  display: block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 0.8rem !important;
+  font-weight: bold !important;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6) !important;
+  margin-bottom: 0.5rem;
+  text-align: left !important;
+  letter-spacing: 0.05em;
+}
+
+/* Input styling */
+.newsletter-input {
+  width: 100% !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 1rem !important;
+  padding: 0.8rem 1rem !important;
+  border-radius: 6px !important;
+  box-sizing: border-box !important;
+  transition: all 0.3s ease !important;
+  outline: none !important;
+}
+
+.newsletter-input:focus {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+.newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Specification / Hint text */
+.sib-form .entry__specification {
+  display: block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 0.7rem !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  margin-top: 0.4rem;
+  text-align: left !important;
+  line-height: 1.3;
+}
+
+/* Error message styling */
+.sib-form .entry__error--primary {
+  display: block;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 0.75rem !important;
+  color: #ff6b6b !important;
+  margin-top: 0.4rem;
+  text-align: left !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Button styling */
+.newsletter-button {
+  width: 100% !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #ffffff !important;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-weight: bold !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.05em;
+  padding: 0.8rem 1.5rem !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem;
+  transition: all 0.2s ease !important;
+  margin-top: 1.5rem;
+  text-align: center !important;
+}
+
+.newsletter-button:hover {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.newsletter-button svg {
+  fill: currentColor !important;
+  width: 16px !important;
+  height: 16px !important;
+  transition: transform 0.2s ease;
+}
+
+/* Success/Error message panels styling */
+.sib-form-message-panel {
+  margin-bottom: 1.5rem;
+  border-radius: 6px !important;
+  padding: 1rem !important;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+  font-size: 0.85rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+.sib-form-message-panel__text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+}
+
+.sib-form-message-panel svg {
+  width: 16px !important;
+  height: 16px !important;
+  fill: currentColor !important;
+  flex-shrink: 0 !important;
+}
+
+.error-panel {
+  color: #ff6b6b !important;
+  background-color: rgba(255, 107, 107, 0.08) !important;
+  border-color: rgba(255, 107, 107, 0.2) !important;
+}
+
+.success-panel {
+  color: #51cf66 !important;
+  background-color: rgba(81, 207, 102, 0.08) !important;
+  border-color: rgba(81, 207, 102, 0.2) !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .newsletter-section {
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+    padding: 0 1.5rem;
+  }
+  
+  .newsletter-card {
+    padding: 2rem 1.5rem;
+  }
+}
