@@ -1,110 +1,69 @@
-import { useEffect, useState } from 'react';
 import '../styles/Footer.css';
-import { ANCIENT_CHARS, ALL_SCRAMBLE_CHARS, ScriptType } from '../utils/ancientScripts';
 
 function Footer() {
-  const titleText = 'THE PERIPHERY CENTER';
-  const [displayChars, setDisplayChars] = useState<string[]>(titleText.split(''));
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  useEffect(() => {
-    const animate = () => {
-      setIsAnimating(true);
-
-      const scriptTypes = Object.keys(ANCIENT_CHARS) as Array<ScriptType>;
-      const scriptType = scriptTypes[Math.floor(Math.random() * scriptTypes.length)];
-      const chars = ANCIENT_CHARS[scriptType];
-
-      const targetChars = titleText.split('').map(char => {
-        if (char === ' ') return ' ';
-        return chars[Math.floor(Math.random() * chars.length)];
-      });
-
-      const holdNormalDuration = 10000; // 10s hold
-      const scrambleDuration = 5000; // 5s scramble
-      const descrambleDuration = 5000; // 5s descramble
-      const frameRate = 20;
-      const frameTime = 1000 / frameRate;
-
-      let frameCount = 0;
-      const holdNormalFrames = holdNormalDuration / frameTime;
-      const scrambleFrames = scrambleDuration / frameTime;
-      const descrambleFrames = descrambleDuration / frameTime;
-
-      const animationInterval = setInterval(() => {
-        frameCount++;
-
-        if (frameCount <= holdNormalFrames) {
-          setDisplayChars(titleText.split(''));
-        } else if (frameCount <= holdNormalFrames + scrambleFrames) {
-          const progress = (frameCount - holdNormalFrames) / scrambleFrames;
-          const revealedCount = Math.floor(progress * titleText.length);
-
-          setDisplayChars(titleText.split('').map((originalChar, index) => {
-            if (originalChar === ' ') return ' ';
-            if (index < revealedCount) {
-              return Math.random() < 0.95 ? targetChars[index] : ALL_SCRAMBLE_CHARS[Math.floor(Math.random() * ALL_SCRAMBLE_CHARS.length)];
-            } else {
-              return Math.random() < 0.9 ? originalChar : ALL_SCRAMBLE_CHARS[Math.floor(Math.random() * ALL_SCRAMBLE_CHARS.length)];
-            }
-          }));
-        } else if (frameCount <= holdNormalFrames + scrambleFrames + descrambleFrames) {
-          const descrambleProgress = (frameCount - holdNormalFrames - scrambleFrames) / descrambleFrames;
-          const restoredCount = Math.floor(descrambleProgress * titleText.length);
-
-          setDisplayChars(titleText.split('').map((originalChar, index) => {
-            if (originalChar === ' ') return ' ';
-            if (index < restoredCount) {
-              return Math.random() < 0.95 ? originalChar : ALL_SCRAMBLE_CHARS[Math.floor(Math.random() * ALL_SCRAMBLE_CHARS.length)];
-            } else {
-              return Math.random() < 0.9 ? targetChars[index] : ALL_SCRAMBLE_CHARS[Math.floor(Math.random() * ALL_SCRAMBLE_CHARS.length)];
-            }
-          }));
-        } else {
-          clearInterval(animationInterval);
-          setDisplayChars(titleText.split(''));
-          setIsAnimating(false);
-        }
-      }, frameTime);
-
-      return animationInterval;
-    };
-
-    const startDelay = setTimeout(() => {
-      animate();
-    }, 1000);
-
-    const recurringAnimation = setInterval(() => {
-      if (!isAnimating) {
-        animate();
-      }
-    }, 20000);
-
-    return () => {
-      clearTimeout(startDelay);
-      clearInterval(recurringAnimation);
-    };
-  }, [isAnimating]);
-
   return (
-    <footer className="footer">
-      <div className="footer-content">
-        <div className="footer-logo">
-          <div className="footer-title">
-            {displayChars.map((char, index) => (
-              <span key={index} className={char === ' ' ? 'space' : 'char'}>
-                {char}
-              </span>
-            ))}
-          </div>
+    <footer className="about-main-footer">
+      <div className="about-main-footer-inner">
+        <div className="about-footer-contact">
+          <button
+            className="about-footer-newsletter-btn"
+            onClick={() => (document.getElementById('brevo-modal') as HTMLDialogElement)?.showModal()}
+          >
+            Subscribe to our newsletter
+          </button>
+          <span className="about-footer-divider">|</span>
+          <a className="about-footer-email" href="mailto:hello@peripherycenter.com">hello@peripherycenter.com</a>
         </div>
-        <a
-          href="mailto:hello@peripherycenter.com"
-          className="footer-button"
-        >
-          CHAT WITH US
-        </a>
+        <div className="about-footer-titles">
+          <h1 className="about-title">The Periphery Center</h1>
+          <h1 className="about-title" style={{ fontWeight: 300, letterSpacing: '0.05em', fontSize: '0.8rem' }}>A Living Culture Lab</h1>
+        </div>
       </div>
+
+      <dialog
+        id="brevo-modal"
+        style={{
+          border: 'none',
+          borderRadius: '12px',
+          padding: '0',
+          maxWidth: '540px',
+          width: '90%',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.4)',
+          backgroundColor: '#000000',
+          overflow: 'hidden',
+          position: 'relative'
+        }}
+      >
+        <button
+          onClick={() => (document.getElementById('brevo-modal') as HTMLDialogElement)?.close()}
+          style={{
+            position: 'absolute',
+            top: '12px',
+            right: '12px',
+            background: 'rgba(0, 0, 0, 0.3)',
+            border: 'none',
+            fontSize: '16px',
+            cursor: 'pointer',
+            color: '#fff',
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10
+          }}
+        >
+          ✕
+        </button>
+        <iframe
+          width="100%"
+          height="490"
+          src="https://2c936e86.sibforms.com/v2/serve/MUIFAGZ5TIrpsi4D4Rd2DllBiG_U2RgtNxkCv81FlswvCw8e0TAlaNJRxhOVtKloxJ8aJCdLZAPPHdSrwqnGsJ8bCiFCdkyxZw9fHhJ51Pw_sc0Iu1sqs5KojcqvcWv1GG6aMMN49b9P2y95LZ-_zWVueMHiEA6j3ywm2iYaC9bTgxWh5q_P2ES0JpS7JNrIhDKHtFYAG-oQqJoknw=="
+          allowFullScreen
+          style={{ display: 'block', border: 'none', width: '100%' }}
+        />
+      </dialog>
     </footer>
   );
 }

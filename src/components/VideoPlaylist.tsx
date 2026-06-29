@@ -111,6 +111,7 @@ function VideoPlaylist() {
             src={VIDEOS[slots[i]]}
             muted
             playsInline
+            autoPlay={active === i && !stopped}
             preload="auto"
             onEnded={active === i ? handleEnded : undefined}
           />

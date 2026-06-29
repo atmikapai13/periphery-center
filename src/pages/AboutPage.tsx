@@ -4,6 +4,8 @@ import BorromeanKnot from '../components/BorromeanKnot';
 import Tetrahedron from '../components/Tetrahedron';
 import DecryptingImage from '../components/DecryptingImage';
 import VideoPlaylist from '../components/VideoPlaylist';
+import LabCalendar from '../components/LabCalendar';
+import Footer from '../components/Footer';
 
 // Import all images from assets/pictures
 import img1 from '../assets/pictures/IMG_20160831_125703.jpg';
@@ -31,31 +33,31 @@ function AboutPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(
     () => Math.floor(Math.random() * slideshowImages.length)
   );
-  // Reveal duration for the *current* image; set when the image changes so it
-  // never restarts mid-animation. Default 5s (the un-hovered speed).
   const [revealDuration, setRevealDuration] = useState(5000);
-  // Hover speed multiplier driven by cursor X over the image: 0.5x (far left)
-  // → 1x (center) → 2x (far right). 1x when not hovering. A ref so cursor moves
-  // don't trigger re-renders. Read live by the slideshow ticker below.
-  const speedRef = useRef(1);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
-  // Slideshow effect - advance to a random image (no immediate repeat). Driven
-  // by a progress accumulator that fills at the current hover speed, so moving
-  // the cursor right speeds the whole cycle up and left slows it down.
+  const speedRef = useRef(1);
+  const calendarOpenRef = useRef(false);
+  const revealDurationRef = useRef(5000);
+
+  useEffect(() => { calendarOpenRef.current = calendarOpen; }, [calendarOpen]);
+
   useEffect(() => {
     if (slideshowImages.length <= 1) return;
-    const CYCLE_MS = 8000; // 5s decrypt reveal + 3s holding sharp, at 1x
+    const CYCLE_MS = 8000;
     const TICK = 50;
     let progress = 0;
     const interval = setInterval(() => {
+      // Freeze once the image is fully revealed while calendar is open.
+      if (calendarOpenRef.current && progress >= revealDurationRef.current) return;
       progress += TICK * speedRef.current;
       if (progress < CYCLE_MS) return;
       progress = 0;
-      // Snapshot the speed so this image's reveal stays proportional to its hold.
       const speed = speedRef.current;
-      setRevealDuration(Math.round(5000 / speed));
+      const nextDuration = Math.round(5000 / speed);
+      revealDurationRef.current = nextDuration;
+      setRevealDuration(nextDuration);
       setCurrentImageIndex((prevIndex) => {
-        // Pick uniformly among all images except the current one.
         let next = Math.floor(Math.random() * (slideshowImages.length - 1));
         if (next >= prevIndex) next += 1;
         return next;
@@ -108,17 +110,15 @@ function AboutPage() {
         <section className="principle-section knot-section">
           <div className="principle-section-content">
             <h2 className="principle-section-title">Core Principles</h2>
-            <div className="principles-grid">
+            <div className="knot-canvas">
+              <BorromeanKnot />
+            </div>
+            <div className="principles-grid knot-grid">
               <div className="principle principle-left principle-top">
                 <h3 className="principle-heading">Senses &amp; Physics.</h3>
                 <p className="principle-text">
                   All technology explored must engage the body and the spaces we inhabit. We build for the physical world, enhancing human experiences.
                 </p>
-              </div>
-              {/* Rotating chrome Borromean rings, draggable. Top-right cell:
-                beside "Human Experience", above "Enrich the Everyday". */}
-              <div className="knot-canvas">
-                <BorromeanKnot />
               </div>
               <div className="principle principle-right">
                 <h3 className="principle-heading">The Everyday &amp; The Elevated.</h3>
@@ -205,83 +205,9 @@ function AboutPage() {
 
       </div> {/* Closes about-content */}
 
-      {/* Footer Section */}
-      <footer className="about-main-footer">
-        <div className="about-main-footer-inner">
-          <a className="about-footer-email" href="mailto:hello@peripherycenter.com">hello@peripherycenter.com</a>
-          <div className="about-footer-titles">
-            <h1 className="about-title">The Periphery Center</h1>
-            <h1 className="about-title" style={{ fontWeight: 300, letterSpacing: '0.05em', fontSize: '0.8rem' }}>A Living Culture Lab</h1>
-          </div>
-        </div>
+      <LabCalendar open={calendarOpen} onOpenChange={setCalendarOpen} />
 
-        {/* 1. The Clean Trigger Button */}
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
-          <button
-            onClick={() => (document.getElementById('brevo-modal') as HTMLDialogElement)?.showModal()}
-            style={{
-              padding: '12px 24px',
-              backgroundColor: '#111',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              fontWeight: '600'
-            }}
-          >
-            Subscribe to Newsletter
-          </button>
-        </div>
-
-        {/* 2. The Hidden Pop-up Modal */}
-        <dialog
-          id="brevo-modal"
-          style={{
-            border: 'none',
-            borderRadius: '12px',
-            padding: '0',              // Wipes out the thick white border
-            maxWidth: '540px',          // Perfectly matches the width of the Brevo form
-            width: '90%',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.4)',
-            backgroundColor: '#4c3e3e', // Matches the dark tone of your form layout
-            overflow: 'hidden',        // Clips the iframe corners to keep the 12px border radius
-            position: 'relative'
-          }}
-        >
-          {/* Close Window Button - Floats over the top-right corner cleanly */}
-          <button
-            onClick={() => (document.getElementById('brevo-modal') as HTMLDialogElement)?.close()}
-            style={{
-              position: 'absolute',
-              top: '12px',
-              right: '12px',
-              background: 'rgba(0, 0, 0, 0.3)',
-              border: 'none',
-              fontSize: '16px',
-              cursor: 'pointer',
-              color: '#fff',
-              width: '28px',
-              height: '28px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 10
-            }}
-          >
-            ✕
-          </button>
-
-          {/* Your Brevo Code - Height increased to fit the full form and captcha */}
-          <iframe
-            width="100%"
-            height="490"
-            src="https://2c936e86.sibforms.com/v2/serve/MUIFAGZ5TIrpsi4D4Rd2DllBiG_U2RgtNxkCv81FlswvCw8e0TAlaNJRxhOVtKloxJ8aJCdLZAPPHdSrwqnGsJ8bCiFCdkyxZw9fHhJ51Pw_sc0Iu1sqs5KojcqvcWv1GG6aMMN49b9P2y95LZ-_zWVueMHiEA6j3ywm2iYaC9bTgxWh5q_P2ES0JpS7JNrIhDKHtFYAG-oQqJoknw=="
-            allowFullScreen
-            style={{ display: 'block', border: 'none', width: '100%' }}
-          ></iframe>
-        </dialog>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -60,6 +60,11 @@ function LandingPage() {
     let startTime = 0;
     let lastDraw = -Infinity;
 
+    // Pull the background color from the global --site-bg CSS variable so the
+    // canvas matches the rest of the site from one source of truth.
+    const siteBg =
+      getComputedStyle(document.documentElement).getPropertyValue('--site-bg').trim() || '#f3dcc2';
+
     // Grid config (recomputed on setup + resize).
     let cols = 0;
     let rows = 0;
@@ -116,7 +121,7 @@ function LandingPage() {
       // Background binaries (grey, no glow) — batched in one style.
       ctx.font = bgFont();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = 'rgba(177, 176, 176, 0.42)'; // #b1b0b06a
+      ctx.fillStyle = 'rgba(177, 176, 176, 0.42)';
       for (let row = 0; row < rows; row++) {
         const y = TOP + row * lineH;
         for (let col = 0; col < cols; col++) {

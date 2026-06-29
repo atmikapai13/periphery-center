@@ -1,9 +1,7 @@
 .newsletter-section {
   display: flex;
   justify-content: center;
-  margin-top: 8rem;
-  margin-bottom: 8rem; /* Leave room for the fixed footer at bottom */
-  padding: 0 2rem;
+  padding: 0;
   position: relative;
   z-index: 10;
 }
@@ -11,21 +9,11 @@
 .newsletter-card {
   width: 100%;
   max-width: 500px;
-  background: rgba(0, 0, 0, 0.25) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  background: #000000 !important;
+  border: none !important;
   padding: 2.5rem 2.5rem;
-  border-radius: 10px !important;
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 0 !important;
   box-sizing: border-box;
-}
-
-.newsletter-card:hover {
-  background: rgba(0, 0, 0, 0.45) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 8px 30px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Titles */
@@ -82,8 +70,8 @@
 /* Input styling */
 .newsletter-input {
   width: 100% !important;
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
   color: #ffffff !important;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
   font-size: 1rem !important;
@@ -95,9 +83,9 @@
 }
 
 .newsletter-input:focus {
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  background: rgba(255, 255, 255, 0.06) !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+  border-color: #ffffff !important;
+  background: #1a1a1a !important;
+  box-shadow: none !important;
 }
 
 .newsletter-input::placeholder {

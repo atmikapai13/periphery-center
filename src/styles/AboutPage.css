@@ -1,13 +1,13 @@
 /* New About Page Styles */
 .about-page-new {
   background-color: #000000;
+  color: #ffffff;
   min-height: 100vh;
   width: 100%;
-  padding: 1rem 1rem 5rem 1rem;
+  padding: 1rem calc(1rem + 2.25rem) 5rem 2rem;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0;
   box-sizing: border-box;
-  color: #ffffff;
   position: relative;
   overflow-x: hidden;
 }
@@ -27,60 +27,6 @@
   color: #ffffff;
   line-height: 1.6;
   overflow: hidden;
-}
-
-/* Main Footer Section */
-.about-main-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 100;
-  background-color: #000000;
-  padding: 0.5rem 1rem;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-.about-main-footer-inner {
-  max-width: 95vw;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 1rem;
-  text-align: right;
-}
-
-/* Contact email, bottom-left of the footer. */
-.about-footer-email {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 0.8rem;
-  color: #ffffff;
-  text-decoration: none;
-  letter-spacing: 0.02em;
-}
-
-.about-footer-email:hover {
-  text-decoration: underline;
-}
-
-.about-title {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1.0rem;
-  font-weight: bold;
-  margin: 0;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-}
-
-.about-subtitle {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: 300;
-  margin: 0rem 0 0 0;
-  letter-spacing: 0.02em;
 }
 
 /* Content Section */
@@ -109,11 +55,11 @@
 .about-description {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 1.4rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.3;
   color: #ffffff;
   letter-spacing: 0.05em;
-  max-width: 75vw;
+  max-width: 72vw;
   word-spacing: 5%;
 }
 
@@ -124,7 +70,8 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding-bottom: 2rem;
+  height: calc(100vh - 10rem);
+  overflow: hidden;
 }
 
 /* Rotating chrome knot occupies the top-right grid cell — beside "Human
@@ -132,15 +79,12 @@
    re-enabled so it stays draggable inside the content layer (which has
    pointer-events: none). */
 .knot-canvas {
-  grid-column: 2;
-  grid-row: 1;
-  width: 100%;
-  height: 350px; /*borromean size*/
-  /* Float up so it isn't bounded by the cell / "Human Experience" top. */
-  margin-top: -2rem;
-  /* Nudge the knot slightly left within its cell. */
-  transform: translateX(-8rem);
-  /* Sit above the grid/text so nothing clips or covers the knot. */
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-60%);
+  width: 50%;
+  height: 350px;
   z-index: 20;
   pointer-events: auto;
 }
@@ -148,49 +92,49 @@
 /* Rotating chrome tetrahedron in the "How We Act" section. Desktop: lower-left
    cell (col 1 / row 2), nudged right and overlapping the row below. */
 .tetra-canvas {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 2;
   width: 100%;
   height: 280px;
   margin-top: -1rem;
   margin-bottom: -6rem;
-  transform: translateX(12rem);
   z-index: 100;
   pointer-events: auto;
 }
 
-/* Desktop placement for "Rhythm Over Rules" (centered + nudged down in its cell). */
-.tetra-section .principle-right {
-  align-self: center;
-  transform: translateY(3rem);
+@media (max-width: 768px) {
+  .knot-canvas {
+    height: 200px;
+  }
+  .tetra-canvas {
+    height: 200px;
+  }
 }
 
-/* Three explicit rows so each heading gets its own band; align-content:
-   space-between then spreads them evenly down the viewport.
-   Row 1: "Human Experience" (left) + knot (right)
-   Row 2: "Enrich the Everyday" (right)
-   Row 3: "Collective by Default" (left) */
+/* Desktop placement for "Rhythm Over Rules". */
+.tetra-section .principle-right {
+  align-self: start;
+  transform: none;
+}
+
 .principle-top {
   grid-column: 1;
   grid-row: 1;
+  align-self: start;
 }
 
 .principle-right {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 2;
-  /* Pull up so the text overlaps the knot above it... */
-  margin-top: -6rem;
-  /* ...and sit above the knot (z-index: 20) so the text reads on top. */
+  margin-top: 0;
   z-index: 30;
+  align-self: start;
 }
 
 .principle-bottom {
-  /* Span the full bottom row so the whole row is a hover target. The text
-     keeps its own max-width, so it still reads as a left-aligned block. */
   grid-column: 1 / -1;
   grid-row: 3;
-  /* Re-enable pointer events (the content layer sets pointer-events: none) so
-     the cursor-following preview can be triggered. */
+  align-self: start;
   pointer-events: auto;
 }
 
@@ -214,7 +158,7 @@
 
 .principle-section-title {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 1.6rem;
+  font-size: 3.2rem;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: -0.01em;
@@ -240,13 +184,14 @@
 .principles-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: 1fr 1fr 1fr;
   column-gap: 2rem;
-  row-gap: 3.5rem;
-  /* Stack the three rows from the top with a fixed gap rather than spreading
-     them across the full viewport. */
   flex: 1;
-  align-content: start;
+  overflow: visible;
+}
+
+.knot-grid {
+  grid-template-columns: 1fr;
 }
 
 .principle-heading {
@@ -304,6 +249,14 @@
   z-index: 1;
   mix-blend-mode: normal;
   pointer-events: none;
+}
+
+/* The "What We Make" section overlays its text on video footage, so it keeps
+   light text for contrast — unlike the beige-backed sections above it. */
+.build-section .principle-section-title,
+.build-section .principle-heading,
+.build-section .principle-text {
+  color: #ffffff;
 }
 
 /* Darkening overlay over the video to improve text contrast */
@@ -383,7 +336,7 @@
 
   .about-description {
     font-size: 1.4rem;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 1.1;
     max-width: none;
   }
@@ -479,6 +432,7 @@
   .tetra-section .principles-grid {
     position: relative;
     isolation: isolate; /* contain the shape<->text blend */
+    overflow: hidden;
   }
 
   .knot-section .knot-canvas,
