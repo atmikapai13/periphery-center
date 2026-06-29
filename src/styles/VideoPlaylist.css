@@ -28,6 +28,13 @@
   opacity: 0;
 }
 
+.video-playlist-player::-webkit-media-controls-start-playback-button,
+.video-playlist-player::-webkit-media-controls-play-button,
+.video-playlist-player::-webkit-media-controls {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
 .video-playlist-player.is-active {
   opacity: 1;
 }

@@ -35,7 +35,7 @@ export default function LabCalendar({ open, onOpenChange }: Props) {
 
       <div className="lab-calendar-panel" aria-hidden={!open}>
         <div className="lab-calendar-content">
-          <p className="lab-calendar-header">To build community through creative exploration, we move through structured cycles that we call labs:</p>
+          <p className="lab-calendar-header">To build community through creative exploration, we move through structured, cyclical labs:</p>
           <div className="lab-steps">
             {STEPS.filter(step => !step.subOf || active === step.subOf).map((step, index) => {
               const isSub = !!step.subOf;
