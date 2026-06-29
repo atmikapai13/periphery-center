@@ -18,7 +18,9 @@ interface Props {
 }
 
 export default function LabCalendar({ open, onOpenChange }: Props) {
-  const [active, setActive] = useState<number | null>(null);
+  const [active, setActive] = useState<number | null>(() =>
+    typeof window !== 'undefined' && window.innerWidth <= 768 ? 1 : null
+  );
 
   return (
     <aside className={`lab-calendar${open ? ' lab-calendar--open' : ''}`}>
@@ -33,7 +35,7 @@ export default function LabCalendar({ open, onOpenChange }: Props) {
 
       <div className="lab-calendar-panel" aria-hidden={!open}>
         <div className="lab-calendar-content">
-          <p className="lab-calendar-header">We iterate through cycles of labs:</p>
+          <p className="lab-calendar-header">To build community through creative exploration, we move through structured cycles that we call labs:</p>
           <div className="lab-steps">
             {STEPS.filter(step => !step.subOf || active === step.subOf).map((step, index) => {
               const isSub = !!step.subOf;
@@ -96,7 +98,7 @@ export default function LabCalendar({ open, onOpenChange }: Props) {
               Subscribe to our newsletter
             </button>
             <a className="lab-calendar-mobile-email" href="mailto:hello@peripherycenter.com">
-              hello@peripherycenter.com
+              or contact us at hello@peripherycenter.com
             </a>
           </div>
         </div>
