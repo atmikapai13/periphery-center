@@ -63,6 +63,10 @@
   word-spacing: 5%;
 }
 
+.about-description strong {
+  font-weight: 700;
+}
+
 /* Core Principles Section */
 .principle-section {
   margin-top: 10rem;
@@ -104,10 +108,10 @@
 
 @media (max-width: 768px) {
   .knot-canvas {
-    height: 200px;
+    height: 100px;
   }
   .tetra-canvas {
-    height: 200px;
+    height: 100px;
   }
 }
 
@@ -336,7 +340,7 @@
 
   .about-description {
     font-size: 1.4rem;
-    font-weight: 600;
+    font-weight: 300;
     line-height: 1.1;
     max-width: none;
   }

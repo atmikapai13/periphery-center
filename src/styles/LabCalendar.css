@@ -61,6 +61,8 @@
   overflow-y: auto;
   box-sizing: border-box;
   scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
 }
 
 .lab-calendar-header {
@@ -227,5 +229,78 @@
 
 @keyframes fadein-iterate {
   to { opacity: 0.7; }
+}
+
+.lab-calendar-mobile-footer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .lab-calendar-mobile-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+  }
+
+  .lab-calendar-mobile-newsletter {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    opacity: 0.7;
+    text-align: left;
+  }
+
+  .lab-calendar-mobile-newsletter:hover {
+    text-decoration: underline;
+  }
+
+  .lab-calendar-mobile-email {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    opacity: 0.7;
+  }
+
+  .lab-calendar-mobile-email:hover {
+    text-decoration: underline;
+  }
+}
+
+@media (max-width: 768px) {
+  .lab-calendar--open .lab-calendar-panel {
+    width: 90vw;
+  }
+
+  .lab-calendar-content {
+    width: 90vw;
+  }
+
+  .lab-calendar-header {
+    font-size: 0.85rem;
+  }
+
+  .lab-step-name {
+    font-size: 1rem;
+  }
+
+  .lab-step-num {
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.75rem;
+  }
+
+  .lab-step-desc {
+    font-size: 0.9rem;
+  }
 }
 

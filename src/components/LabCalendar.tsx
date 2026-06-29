@@ -87,6 +87,18 @@ export default function LabCalendar({ open, onOpenChange }: Props) {
               );
             })}
           </div>
+
+          <div className="lab-calendar-mobile-footer">
+            <button
+              className="lab-calendar-mobile-newsletter"
+              onClick={() => (document.getElementById('brevo-modal') as HTMLDialogElement)?.showModal()}
+            >
+              Subscribe to our newsletter
+            </button>
+            <a className="lab-calendar-mobile-email" href="mailto:hello@peripherycenter.com">
+              hello@peripherycenter.com
+            </a>
+          </div>
         </div>
       </div>
     </aside>

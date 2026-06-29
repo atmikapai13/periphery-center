@@ -72,9 +72,11 @@
 }
 
 @media (max-width: 768px) {
-  /* Size the video for mobile; controls stay overlaid at the bottom of the
-     footage (base styles), same as desktop's in-video position. */
   .video-stage {
     height: 38dvh;
+  }
+
+  .video-playlist-controls {
+    display: none;
   }
 }

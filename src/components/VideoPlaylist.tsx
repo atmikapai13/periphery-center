@@ -46,13 +46,34 @@ function VideoPlaylist() {
   }, [slots]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Play the active buffer from the start whenever it changes.
+  // Tries immediately, then retries on canplay/loadedmetadata for iOS Safari
+  // which sometimes needs the media to be ready before play() succeeds.
   useEffect(() => {
     if (stopped) return;
     const el = refs[active].current;
-    if (el) {
-      el.currentTime = 0;
-      el.play().catch(() => {});
-    }
+    if (!el) return;
+    el.currentTime = 0;
+    const tryPlay = () => el.play().catch(() => {});
+    tryPlay();
+    el.addEventListener('canplay', tryPlay, { once: true });
+    el.addEventListener('loadedmetadata', tryPlay, { once: true });
+    return () => {
+      el.removeEventListener('canplay', tryPlay);
+      el.removeEventListener('loadedmetadata', tryPlay);
+    };
+  }, [active, stopped]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Intersection Observer — re-triggers play when video scrolls into view on mobile.
+  useEffect(() => {
+    if (stopped) return;
+    const el = refs[active].current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => { if (entries[0].isIntersecting) el.play().catch(() => {}); },
+      { threshold: 0.4 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [active, stopped]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Active clip finished → flip to the other (already-preloaded) buffer.
